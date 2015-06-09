@@ -1,0 +1,40 @@
+#!/bin/bash
+
+JOB_DIR=/var/vcap/jobs/cpi
+RUN_DIR=/var/vcap/sys/run/cpi
+PIDFILE=$RUN_DIR/cpi.pid
+LIB_DIR=$JOB_DIR/lib
+
+source /var/vcap/packages/common/utils.sh
+
+case $1 in
+
+start)
+pid_guard $PIDFILE "cpi"
+
+mkdir -p $RUN_DIR
+
+# Clean-up any Tomcat droppings
+rm -rf $RUN_DIR/tomcat
+
+export JAVA_HOME=/var/vcap/packages/cpi-java
+
+cd $JOB_DIR
+exec $JAVA_HOME/bin/java -XX:OnOutOfMemoryError="/var/vcap/bosh/bin/monit restart cpi" \
+-server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
+-jar /var/vcap/packages/cpi/cpi-core.jar
+
+;;
+
+stop)
+kill_and_wait $PIDFILE
+
+;;
+
+*)
+echo "Usage: cpi {start|stop}"
+
+;;
+
+esac
+exit 0

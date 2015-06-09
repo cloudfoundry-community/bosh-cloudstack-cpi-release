@@ -1,0 +1,79 @@
+---
+name: cpi
+templates:
+  cpi.erb: bin/cpi
+  application.yml.erb: config/application.yml
+packages:
+- cpi-common
+- cpi-java
+- cpi
+
+properties:
+  nats.user:
+    description: The user used to connect to the NATS server.
+  nats.password:
+    description: The password used to connect to the NATS server.
+  nats.machines:
+    description: The list of hosts running NATS server.
+  nats.port:
+    description: The port used to connect to the NATS server.
+
+  cpi.f5.url:
+    description: The HTTPS URL of the target F5 LTM.
+  cpi.f5.user:
+    description: The user used to authenticate against the LTM.
+  cpi.f5.password:
+    description: The password used to authenticate against the LTM.
+  cpi.f5.poolNamePrefix:
+    description:
+      The text used to prefix the name of the pools managed by cpi.
+    default: _pool_cf_
+  cpi.f5.iRuleNamePrefix:
+    description:
+      The text used to prefix the name of the iRules managed by cpi.
+    default: _rule_cf_
+  cpi.f5.loggingPoolName:
+    description:
+      The pool used for HSL logging to forwards access logs and metrics to
+      Loggregator. The pool members of this pool get populated automatically by
+      cpi.
+    default: _cf_logging_pool
+  cpi.f5.loggingPort:
+    description:
+      The port cpi listens on for receiving access logs and metrics from
+      the LTM. These logs and metrics get forwarded to Metron.
+    default: 2015
+  cpi.f5.ltmId:
+    description:
+      The 'index' of the LTM used in Loggregator messages. (i.e. Access logs
+      show up with [RTR/ltmId] as the source.)
+    default: f5.ltmId
+  cpi.f5.skipTlsVerification:
+    description:
+      Indicates of TLS verification should be skipped when calling the LTM
+      REST API.
+    default: true
+
+  # Router Virtual Server
+  cpi.f5.routerVirtualServer.name:
+    description: The name of the Virtual Server on the LTM.
+  cpi.f5.routerVirtualServer.destination:
+    description: The socket address of the virtual server (i.e. 10.1.2.3:80)
+  cpi.f5.routerVirtualServer.description:
+    description: The value of the Virtual Server's description field.
+    default: Cloud Foundry cpi Virtual Server -- Automatically created by cpi.
+  cpi.f5.routerVirtualServer.source:
+    description: The source field of the virtual server.
+    default: 0.0.0.0/0
+  cpi.f5.routerVirtualServer.rules:
+    description: A list of custom iRules used by the virtual server.
+
+  cpi.heap_size:
+    description: The Java heap size of the cpi.
+    default: "300m"
+
+  cpi.port:
+    description:
+      The HTTP port used by the cpi for /varz, /healthz, and maybe some
+      REST endpoints.
+    default: 6080

@@ -1,0 +1,7 @@
+---
+name: cpi
+dependencies:
+files:
+- cpi-core/**/*
+- java/*
+- common/setup-java-prepackaging.sh
