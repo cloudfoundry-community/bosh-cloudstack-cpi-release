@@ -5,11 +5,11 @@ set -e
 
 cd ${BUILD_DIR}/bosh-cloudstack-cpi-core
 mvn -B -e clean install -DskipTests=true
-mv target/cpi-core.jar ${BUILD_DIR}/
+mv target/cloudstack-cpi-core-0.0.1-SNAPSHOT.jar  ${BUILD_DIR}/cloudstack-cpi-core.jar
 
 
 cd ${BUILD_DIR}
-rm -rf cpi-core
+rm -rf bosh-cloudstack-cpi-core
 
 cleanup_java
 
