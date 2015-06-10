@@ -2,6 +2,6 @@
 name: cpi
 dependencies:
 files:
-- cpi-core/**/*
+- bosh-cloudstack-cpi-core/**/*
 - java/*
 - common/setup-java-prepackaging.sh

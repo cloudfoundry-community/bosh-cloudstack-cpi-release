@@ -3,7 +3,7 @@ set -e
 . common/setup-java-prepackaging.sh
 
 
-cd ${BUILD_DIR}/cpi-core
+cd ${BUILD_DIR}/bosh-cloudstack-cpi-core
 mvn -B -e clean install -DskipTests=true
 mv target/cpi-core.jar ${BUILD_DIR}/
 
