@@ -1,5 +1,5 @@
-
 before_install:
+  - git submodule update --init --recursive
   - 'sudo apt-get update'
 #  - 'git config --global user.email "cf-bosh-eng+bosh-ci-push-pull@pivotallabs.com"'
 #  - 'git config --global user.name "BOSH CI Push Pull"'

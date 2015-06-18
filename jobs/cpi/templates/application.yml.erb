@@ -1,16 +1,21 @@
 ---
-cs:
-  endpoint: <%= p('norouter.cs.endpoint') %>
-  tenant:  <%= p('norouter.cs.tenant') %>
-  username:  <%= p('norouter.cs.username') %>
-  password: <%= p('norouter.cs.password') %>
 
+cloudstack:
+  endpoint: <%= p('cloustack.endpoint') %>
+  api_key: <%= p('cloustack.api_key') %>
+  secret_access_key: <%= p('cloustack.secret_access_key') %>
+  default_key_name: <%= p('cloustack.default_key_name') %>
+  private_key: <%= p('cloustack.private_key') %>
+  state_timeout: <%= p('cloustack.state_timeout') %>
+  state_timeout_volume: <%= p('cloustack.state_timeout_volume') %>
+  stemcell_public_visibility:<%= p('cloustack.stemcell_public_visibility') %>
+  default_zone: <%= p('cloustack.default_zone') %>
 
 logging:
-  level: INFO
+  level: DEBUG
 
 
-pidfile: /var/vcap/sys/run/norouter/norouter.pid
+pidfile: /var/vcap/sys/run/cpi/cpi.pid
 
 server:
-  port: <%= p('norouter.port') %>
+  port: <%= p('cpi.port') %>
