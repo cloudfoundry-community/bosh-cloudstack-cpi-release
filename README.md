@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Orange-OpenSource/bosh-cloudstack-cpi-release.png)](https://travis-ci.org/Orange-OpenSource/bosh-cloudstack-cpi-release)
+[![Build Status](https://travis-ci.org/cloudfoundry-community/bosh-cloudstack-cpi-release.png)](https://travis-ci.org/Orange-OpenSource/bosh-cloudstack-cpi-release)
 
 
 
