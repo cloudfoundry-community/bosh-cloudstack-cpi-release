@@ -10,9 +10,17 @@ cloudstack:
   state_timeout_volume: <%= p('cloustack.state_timeout_volume') %>
   stemcell_public_visibility:<%= p('cloustack.stemcell_public_visibility') %>
   default_zone: <%= p('cloustack.default_zone') %>
+  proxy_host: <%= p('cloudstack.proxy_host') %>
+  proxy_port: <%= p('cloudstack.proxy_port') %>
+  proxy_user: <%= p('cloudstack.proxy_user') %>
+  proxy_password: <%= p('cloudstack.proxy_password') %>
 
 logging:
   level: DEBUG
+
+spring:
+  main:
+    show-banner: false
 
 
 pidfile: /var/vcap/sys/run/cpi/cpi.pid
