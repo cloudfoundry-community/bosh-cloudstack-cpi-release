@@ -56,7 +56,7 @@ properties:
   cpi.heap_size:
     description:
       cpi jvm sizing
-    default : 256M      
+    default : 512M      
 
   cpi.port:
     description:
