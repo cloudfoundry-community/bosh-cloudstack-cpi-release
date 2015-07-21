@@ -7,9 +7,8 @@
 bosh external cloustack cpi implementation (spring boot, included in bosh-cloudstack-cpi-release)
 leverages apache jclouds support for CloudStack
 
-
+```yml
 properties:
-
    cloudstack:
       endpoint: <your_end_point_url> # Ask for your administrator
       api_key: <your_api_key> # You can find at your user page
@@ -20,3 +19,4 @@ properties:
       state_timeout_volume: 1200
       stemcell_public_visibility: true
       default_zone: <default_zone_name> # Zone name of your instaption server
+```
