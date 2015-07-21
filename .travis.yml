@@ -14,6 +14,14 @@ rvm:
 script: 'bosh create release --force --name bosh-cloudstack-cpi --version 0+dev.1 --with-tarball '
 #script: 'bundle exec rake --trace go $TASKS'
 
+# github release, see http://docs.travis-ci.com/user/deployment/releases/
+deploy:
+  provider: releases
+  api_key: "3098531faaf13fc82faa84accece316297b0e653"
+  file: "dev_releases/bosh-cloudstack-cpi/bosh-cloudstack-cpi-0+dev.1.tgz"
+  skip_cleanup: true
+  on:
+    tags: true
 env:
 
 addons:
