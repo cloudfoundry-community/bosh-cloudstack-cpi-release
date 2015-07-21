@@ -2,7 +2,7 @@
 
 JOB_DIR=/var/vcap/jobs/cpi
 RUN_DIR=/var/vcap/sys/run/cpi
-PIDFILE=$RUN_DIR/cpi.pid
+PIDFILE=$RUN_DIR/cpi-core.pid
 LIB_DIR=$JOB_DIR/lib
 
 source /var/vcap/packages/cpi-common/utils.sh
@@ -10,7 +10,7 @@ source /var/vcap/packages/cpi-common/utils.sh
 case $1 in
 
 start)
-pid_guard $PIDFILE "cpi"
+pid_guard $PIDFILE "cpi-core"
 
 mkdir -p $RUN_DIR
 
