@@ -9,47 +9,56 @@ packages:
 - cpi
 
 properties:
-    # CloudStack CPI configuration
-    cloudstack.endpoint:
-      description:
-        cloudstack api endpoint 
-    cloudstack.api_key:
-      description:
-        cloudstack api key
-    cloudstack.secret_access_key:
-      description:
-        cloudstack api secret
-    cloudstack.default_key_name:
-      description:
-        key name for ssh access (unused)
-    cloudstack.private_key:
-      description:
-        private key for ssh access (unused)
-    cloudstack.state_timeout:
-      description:
-        cloudstack api timeout
-       default: 1200
-    cloudstack.state_timeout_volume:
-      description:
-        cloudstack volume api timout
-       default: 1200
-    cloudstack.stemcell_public_visibility:
-      description:
-        must stemcell template be public ?
-       default: true
-    cloudstack.default_zone:
-      description:
-        CloudStack Iaas ZONE to use
-    cloudstack.proxy_host:
-      description:
-        host to the proxy e.g. 192.168.1.1. No proxy if no set
-    cloudstack.proxy_port:
-      description:
-        port to the proxy
-      default: 8080
-    cloudstack.proxy_user:
-      description:
-        user to authent on the proxy
-    cloudstack.proxy_password:
-      description:
-        password to authent on the proxy
+  # CloudStack CPI configuration
+  cloudstack.endpoint:
+    description:
+      cloudstack api endpoint 
+  cloudstack.api_key:
+    description:
+      cloudstack api key
+  cloudstack.secret_access_key:
+    description:
+      cloudstack api secret
+  cloudstack.default_key_name:
+    description:
+      key name for ssh access (unused)
+  cloudstack.private_key:
+    description:
+      private key for ssh access (unused)
+  cloudstack.state_timeout:
+    description:
+      cloudstack api timeout
+    default: 1200
+  cloudstack.state_timeout_volume:
+    description:
+      cloudstack volume api timout
+    default: 1200
+  cloudstack.stemcell_public_visibility:
+    description:
+      must stemcell template be public ?
+    default: true
+  cloudstack.default_zone:
+    description:
+      CloudStack Iaas ZONE to use
+  cloudstack.proxy_host:
+    description:
+      host to the proxy e.g. 192.168.1.1. No proxy if no set
+  cloudstack.proxy_port:
+    description:
+      port to the proxy
+    default: 8080
+  cloudstack.proxy_user:
+    description:
+      user to authent on the proxy
+  cloudstack.proxy_password:
+    description:
+      password to authent on the proxy
+  cpi.heap_size:
+    description:
+      cpi jvm sizing
+    default : 256M      
+
+  cpi.port:
+    description:
+      port the cloudstack cpi rest server is listening on
+    default : 8080      
