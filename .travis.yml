@@ -1,28 +1,20 @@
 before_install:
-  - git submodule update --init --recursive
-  - 'sudo apt-get update'
-#  - 'git config --global user.email "cf-bosh-eng+bosh-ci-push-pull@pivotallabs.com"'
-#  - 'git config --global user.name "BOSH CI Push Pull"'
-
+- git submodule update --init --recursive
+- sudo apt-get update
 install:
-  - 'sudo apt-get install dnsutils'
-  - 'gem install bosh_cli bosh_cli_plugin_micro --no-ri --no-rdoc'
-
+- sudo apt-get install dnsutils
+- gem install bosh_cli bosh_cli_plugin_micro --no-ri --no-rdoc
 rvm:
-  - ruby-2.1.2
-
-script: 'bosh create release --force --name bosh-cloudstack-cpi --version 0+dev.1 --with-tarball '
-#script: 'bundle exec rake --trace go $TASKS'
-
-# github release, see http://docs.travis-ci.com/user/deployment/releases/
+- ruby-2.1.2
+script: 'bosh create release --force --name bosh-cloudstack-cpi --version 0+dev.1
+  --with-tarball '
 deploy:
   provider: releases
-  api_key: "3098531faaf13fc82faa84accece316297b0e653"
-  file: "dev_releases/bosh-cloudstack-cpi/bosh-cloudstack-cpi-0+dev.1.tgz"
-  skip_cleanup: true
+  api_key:
+    secure: A78udnBqNl4hW0Y1AQ+xwEtZ3DfuSnqtDgpt9TxkUkQ+600Gd9u2ZRfhQaScKkXSZ467IMTSUjpTdOsMo+tW9A0ZKzFhP02I3kSa4bZ1/5A76q6tALZIsnQtXhErWGVNCGVOwSqm7PWKexF+kprY6al3/HmElcGEHf/5Z4jhIZvy5XEV/mGZywhqQawQpXuHsLluGdcG1oTjCwZEJ/KZftoH+UyrgnPeC0iqOtaRwmIUFoMmRTe+wXNcDmDYO25Bffl3HURO4rvB0tbYmlwRqkLll+F2eaPOZAFxXP31gWAI/c01xviZi9YKr9kZ+lJSesBVIXeP0+HjfsRNvXoVNK6heWbgptV9RwlcYqU8Kf+yN7qlJq9i9jnEQ1eB/cmQYi2zeuLQX1VdfUBlxNHOYX0ku0YKRJs7QsW7lBc3R0kGL4/tkHF9P9DZMiyqgIgbsmDMVahgrphZzjhcqn7udacaWWa/NObGMglPSFG2owhUNeHCzcWdCMYOWabugAt8/ywTON6DSmrfoX7cOg4hHjJ3a5CBL3tz4IDa+sNW5msvWCDyQRYwX1qpHwchxtVc9dCxTNKRMQc6bGWkm+48gYaGrgPxbL/jIwvYLJS66LjsqqofgfrT87rSvM7PcBS/0xfeumCkqv8aFJrzTxN13tojVCWGYOtyHh4jXhmEocc=
+  file: dev_releases/bosh-cloudstack-cpi/bosh-cloudstack-cpi-0+dev.1.tgz
   on:
-    tags: true
-env:
-
+    repo: Orange-OpenSource/bosh-cloudstack-cpi-release
+env: 
 addons:
-  code_climate:
+  code_climate: 

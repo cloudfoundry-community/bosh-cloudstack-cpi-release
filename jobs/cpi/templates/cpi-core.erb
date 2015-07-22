@@ -10,19 +10,23 @@ source /var/vcap/packages/cpi-common/utils.sh
 case $1 in
 
 start)
-pid_guard $PIDFILE "cpi-core"
+#pid file creation done with spring boot (uses PIDFILE env var)
+#pid_guard $PIDFILE "cpi-core"
 
 mkdir -p $RUN_DIR
-
-# Clean-up any Tomcat droppings
-rm -rf $RUN_DIR/tomcat
 
 export JAVA_HOME=/var/vcap/packages/cpi-java
 
 cd $JOB_DIR
-exec $JAVA_HOME/bin/java -XX:OnOutOfMemoryError="/var/vcap/bosh/bin/monit restart cpi" \
+# exec $JAVA_HOME/bin/java -XX:OnOutOfMemoryError="/var/vcap/bosh/bin/monit restart cpi" \
+# -server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
+# -jar /var/vcap/packages/cpi/cloudstack-cpi-core.jar
+
+exec $JAVA_HOME/bin/java  \
 -server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
 -jar /var/vcap/packages/cpi/cloudstack-cpi-core.jar
+
+
 
 ;;
 
@@ -32,7 +36,7 @@ kill_and_wait $PIDFILE
 ;;
 
 *)
-echo "Usage: cpi {start|stop}"
+echo "Usage: cpi-core {start|stop}"
 
 ;;
 
