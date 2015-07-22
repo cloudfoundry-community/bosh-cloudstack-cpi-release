@@ -20,11 +20,11 @@ export JAVA_HOME=/var/vcap/packages/cpi-java
 cd $JOB_DIR
 # exec $JAVA_HOME/bin/java -XX:OnOutOfMemoryError="/var/vcap/bosh/bin/monit restart cpi" \
 # -server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
-# -jar /var/vcap/packages/cpi/cloudstack-cpi-core.jar
+# -jar /var/vcap/packages/cpi-core/cloudstack-cpi-core.jar
 
 exec $JAVA_HOME/bin/java  \
 -server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
--jar /var/vcap/packages/cpi/cloudstack-cpi-core.jar
+-jar /var/vcap/packages/cpi-core/cloudstack-cpi-core.jar
 
 
 
