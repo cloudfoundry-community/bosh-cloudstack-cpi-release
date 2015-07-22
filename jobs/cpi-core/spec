@@ -1,5 +1,5 @@
 ---
-name: cpi
+name: cpi-core
 templates:
   cpi-core.erb: bin/cpi-core
   cpi.erb: bin/cpi
@@ -7,7 +7,7 @@ templates:
 packages:
 - cpi-common
 - cpi-java
-- cpi
+- cpi-core
 
 properties:
   # CloudStack CPI configuration

@@ -1,5 +1,5 @@
 ---
-name: cpi
+name: cpi-core
 dependencies:
 files:
 - bosh-cloudstack-cpi-core/**/*
