@@ -43,7 +43,7 @@ properties:
       CloudStack Iaas ZONE to use
   cloudstack.proxy_host:
     description:
-      host to the proxy e.g. 192.168.1.1. No proxy if no set
+      host to the proxy e.g. 192.168.1.1. Usefull to reach cloudstack api behind proxy. No proxy if no set
   cloudstack.proxy_port:
     description:
       port to the proxy
@@ -58,8 +58,11 @@ properties:
     description:
       cpi jvm sizing
     default : 512M      
-
+  cpi.host:
+    description:
+      host the cpi-core rest server is listening on. use full for debugging rest server out of bosh deployment
+    default : 127.0.0.1
   cpi.port:
     description:
-      port the cloudstack cpi rest server is listening on
+      port the cpi core rest server is listening on
     default : 8080      
