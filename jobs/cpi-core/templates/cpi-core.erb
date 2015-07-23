@@ -2,7 +2,6 @@
 
 JOB_DIR=/var/vcap/jobs/cpi-core
 RUN_DIR=/var/vcap/sys/run/cpi-core
-PIDFILE=$RUN_DIR/cpi-core.pid
 LIB_DIR=$JOB_DIR/lib
 
 source /var/vcap/packages/cpi-common/utils.sh
@@ -16,6 +15,7 @@ start)
 mkdir -p $RUN_DIR
 
 export JAVA_HOME=/var/vcap/packages/cpi-java
+export PIDFILE=$RUN_DIR/cpi-core.pid
 
 cd $JOB_DIR
 # exec $JAVA_HOME/bin/java -XX:OnOutOfMemoryError="/var/vcap/bosh/bin/monit restart cpi" \
