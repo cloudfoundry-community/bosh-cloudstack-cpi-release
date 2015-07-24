@@ -1,2 +1,2 @@
 #!/bin/sh
-curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" --url http://<%= p('cpi.host') %>:<%= p('cpi.port') %>/cpi -d @-
+curl -X POST -H "Content-Type: application/json" -H "Accept: application/json" http://<%= p('cpi.host') %>:<%= p('cpi.port') %>/cpi -d @-
