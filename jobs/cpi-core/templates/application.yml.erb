@@ -15,6 +15,10 @@ cloudstack:
   proxy_user: <%= p('cloudstack.proxy_user') %>
   proxy_password: <%= p('cloudstack.proxy_password') %>
 
+cpi:
+  ephemeral_disk_offering: ephemeral_volume
+  existing_template_name: "Ubuntu Precise amd64 [2015-06-01]"
+
 logging:
   level: DEBUG
 
