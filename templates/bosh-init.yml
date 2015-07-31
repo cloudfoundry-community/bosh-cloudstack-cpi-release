@@ -1,0 +1,138 @@
+---                                                                                 
+name: bosh                                                                          
+
+releases:
+- name: bosh
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=185
+  sha1: 18a7b9c45ccf88c428e4aab1883468cf0be24428           
+- name: bosh-cloudstack-cpi                                
+  url: file://bosh-cloudstack-cpi-0+dev.11.tgz             
+  sha1: d6481941887672c873b01cb9bbf72bc7dcef1100           
+
+resource_pools:
+- name: vms    
+  network: private
+  stemcell:       
+    url: https://bosh.io/d/stemcells/bosh-vcloud-esxi-ubuntu-trusty-go_agent?v=3016
+    sha1: 20f0dda81c97612f73cecf47af1cb1745be05499                                 
+  cloud_properties:                                                                
+    cpu: 2                                                                         
+    ram: 4_096                                                                     
+    disk: 20_000                                                                   
+  env:                                                                             
+    bosh:                                                                          
+      # c1oudc0w is a default password for vcap user                               
+      password: "$6$4gDD3aV0rdqlrKC$2axHCxGKIObs6tAmMTqYCspcdvQXh3JJcvWOY2WGb4SrdXtnCyNaWlrf3WEqvYR2MYizEGp3kMmbpwBC6jsHt0"
+
+disk_pools:
+- name: disks
+  disk_size: 20_000
+
+networks:
+- name: private
+  type: manual 
+  subnets:     
+  - range: 10.203.7.254/23
+    gateway: 10.203.7.254 
+    dns: [10.203.6.3]     
+    cloud_properties: {name: NET_APPS_SERV} # <--- Replace with Network name
+
+jobs:
+- name: bosh
+  instances: 1
+
+  templates:
+  - {name: nats, release: bosh}
+  - {name: redis, release: bosh}
+  - {name: postgres, release: bosh}
+  - {name: blobstore, release: bosh}
+  - {name: director, release: bosh} 
+  - {name: health_monitor, release: bosh}
+  - {name: powerdns, release: bosh}      
+  - {name: cpi-core, release: bosh-cloudstack-cpi}
+
+  resource_pool: vms
+  persistent_disk_pool: disks
+
+  networks:
+  - {name: private, static_ips: [10.203.6.105]}
+
+  properties:
+    nats:    
+      address: 127.0.0.1
+      user: nats        
+      password: nats-password
+
+    redis:
+      listen_addresss: 127.0.0.1
+      address: 127.0.0.1        
+      password: redis-password  
+
+    postgres: &db
+      host: 127.0.0.1
+      user: postgres 
+      password: postgres-password
+      database: bosh             
+      adapter: postgres          
+
+    blobstore:
+      address: 10.203.6.105
+      port: 25250          
+      provider: dav        
+      director: {user: director, password: director-password}
+      agent: {user: agent, password: agent-password}         
+
+    director:
+      address: 127.0.0.1
+      name: my-bosh     
+      db: *db           
+      cpi_job: cpi-core 
+      max_threads: 4    
+      # check cloudstack cpi support. Enabling it will fail the jobs restarts. "undefined method `cid' for nil:NilClass"
+      enable_snapshots: false                                                                                           
+
+
+    hm:
+      http: {user: hm, password: hm-password}
+      director_account: {user: admin, password: admin}
+      resurrector_enabled: true                       
+                                                      
+    dns:                                              
+      address: 10.203.6.105                           
+      #the bosh powerDNS will contact the following DNS server for serving DNS entries from other domains
+      # i.e. elpaaso-dns.internal-qa.paas                                                                
+      recursor: 10.203.6.3                                                                               
+      db: *db                                                                                            
+
+  cloudstack:  &cloudstack # <--- Replace values below
+    endpoint: http://csm05.preprod.cloud.s0.p.fti.net:8080/client/api
+    api_key: TKVNrMEIx2lHMjwavyb2Y68c7D3FP1xzQ54Fnvdlzt8ZNKe2Bcf9qF8_-VGSQ_-0qVuXXJ2KiNcMxQPbWWB93Q
+    secret_access_key: zz
+    default_key_name: zzzzz
+    private_key: wwww
+    state_timeout: 100
+    state_timeout_volume: 1200
+    stemcell_public_visibility: true
+    default_zone: SPH-PP-NEON
+    proxy_host: 10.98.253.30
+    proxy_port: 8080
+    proxy_user: poblin
+    proxy_password: "xxxxx"
+
+    agent: {mbus: "nats://nats:nats-password@10.203.6.105:4222"}
+
+    ntp: &ntp [elpaaso-ntp1.internal-qa.paas,elpaaso-ntp2.internal-qa.paas]
+
+cloud_provider:
+  template: {name: cpi-core, release: bosh-cloudstack-cpi}
+
+  mbus: "https://mbus:mbus-password@10.203.6.105:6868"
+
+  properties:
+    cloudstack: *cloudstack
+    agent: {mbus: "https://mbus:mbus-password@0.0.0.0:6868"}
+    blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
+    ntp: *ntp
+    cpi:
+      host: 10.203.6.106
+

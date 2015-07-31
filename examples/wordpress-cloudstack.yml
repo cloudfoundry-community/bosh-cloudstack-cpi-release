@@ -1,0 +1,103 @@
+---
+name: wordpress-cloudstack
+director_uuid: <UUID>
+
+release:
+  name: wordpress
+  version: latest
+
+compilation:
+  workers: 3
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    compute_offering: "CO1 - Small STD"
+    disk: 12_300
+    ephemeral_disk_offering: "ephemeral"    
+
+update:
+  canaries: 1
+  canary_watch_time: 3000-120000
+  update_watch_time: 3000-120000
+  max_in_flight: 4
+
+networks:
+  - name: floating
+    type: vip
+    cloud_properties: {}
+  - name: default
+    type: dynamic
+    cloud_properties:
+      security_groups:
+        - bosh
+
+resource_pools:
+  - name: common
+    network: default
+    size: 4
+    stemcell:
+      name: bosh-cloudstack-xen-ubuntu
+      version: latest
+    cloud_properties:
+      compute_offering: "CO1 - Small STD"
+     
+
+jobs:
+  - name: mysql
+    template: mysql
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+
+  - name: nfs
+    template: debian_nfs_server
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+
+  - name: wordpress
+    template: wordpress
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+
+  - name: nginx
+    template: nginx
+    instances: 1
+    resource_pool: common
+    networks:
+      - name: default
+        default: [dns, gateway]
+
+properties:
+  mysql:
+    address: 0.mysql.default.wordpress-cloudstack.microbosh
+    password: c1oudc0w
+
+  nfs_server:
+    address: 0.nfs.default.wordpress-cloudstack.microbosh
+    network: "*.wordpress-cloudstack.microbosh"
+
+  wordpress:
+    admin: f...@bar.com
+    servers:
+      - 0.wordpress.default.wordpress-cloudstack.microbosh
+    servername: "server_name"
+    db:
+      name: wp
+      user: wordpress
+      pass: c1oudc0w
+    auth_key: random key
+    secure_auth_key: random key
+    logged_in_key: random key
+    nonce_key: random key
+    auth_salt: random key
+    secure_auth_salt: random key
+    logged_in_salt: random key
+    nonce_salt: random key
