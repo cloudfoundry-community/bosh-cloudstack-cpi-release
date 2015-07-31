@@ -4,11 +4,18 @@
 
 # bosh-cloudstack-cpi-release
 
-bosh external cloustack cpi implementation (spring boot, included in bosh-cloudstack-cpi-release)
-leverages apache jclouds support for CloudStack
 
 
-Typical bosh.yml configuration to activate the CloudStack external CPI
+## Design :
+* this CPI is a Bosh external CPI i.e a dedicated bosh release wich must be deployed alongside a bosh release OR configured with bosh release in a bosh-init yml manifest
+*  CPI business logic is in a dedicated spring boot app, included in bosh-cloudstack-cpi-release, called cpi-core. This java component has a dedicated template / monit service.
+* leverages apache jclouds support for CloudStack
+* supports Cloudstack advanced zone
+* secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
+* TBC: uses an http server to enable stemcell / template loading by cloudstak (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant).
+
+
+## Typical bosh.yml configuration to activate the CloudStack external CPI
 
 ```yml
 
