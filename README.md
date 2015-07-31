@@ -46,10 +46,45 @@ properties:
       state_timeout: 600
       state_timeout_volume: 1200
       stemcell_public_visibility: true
-      default_zone: <default_zone_name> # Zone name of your instaption server
+      default_zone: <default_zone_name> # Zone name
       proxy_host: <proxy to cloudstack api> #proxy acces active if set
       proxy_port: <proxy port>
       proxy_user: <proxy user>
       proxy_password: <proxy password>
       
+```
+
+
+Typical bosh manifest to deploy on cloudstack
+
+```yml
+
+
+---
+name: xxx
+director_uuid: zzzz
+
+disk_pools:
+  - name: d-pool
+    disk_size: 10240
+    cloud_properties:
+      type: gp2
+
+resource_pools:
+  - name: vm-pool
+    network: net
+    stemcell: 
+      name: bosh-vcloud-esxi-ubuntu-trusty-go_agent
+      version: latest
+    cloud_properties:
+      compute_offering: "CO1 - Small STD"
+      ephemeral_disk_offering: "ephemeral"
+      disk: 8192       
+
+
+
+
+
+
+
 ```
