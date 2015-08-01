@@ -4,16 +4,17 @@
 
 # bosh-cloudstack-cpi-release
 
+This is work in progress / feedbacks welcome (use issues).
 
 
 ## Design :
 * this CPI is a Bosh external CPI i.e a dedicated bosh release wich must be deployed alongside a bosh release OR configured with bosh release in a bosh-init yml manifest
 *  CPI business logic is in a dedicated spring boot app, included in bosh-cloudstack-cpi-release, called cpi-core. This java component has a dedicated template / monit service.
-* leverages apache jclouds support for CloudStack
+* leverages Apache Jclouds support for CloudStack, nice java adapter for Cloudstack API
 * supports Cloudstack advanced zone
 * secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
-* TBC: uses an http server to enable stemcell / template loading by cloudstak (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant).
-
+* TBC: uses an http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant).
+* Out of Scope : security groups provisioning / CS Basic Zones
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
 
@@ -74,23 +75,28 @@ director_uuid: zzzz
 disk_pools:
   - name: d-pool
     disk_size: 10240
-    cloud_properties:
+    cloud_properties: 
       type: gp2
 
 resource_pools:
   - name: vm-pool
     network: net
     stemcell: 
-      name: bosh-vcloud-esxi-ubuntu-trusty-go_agent
+      name: bosh-cloudstack-xen-ubuntu-trusty-go_agent
       version: latest
     cloud_properties:
-      compute_offering: "CO1 - Small STD"
-      ephemeral_disk_offering: "ephemeral"
+      compute_offering: "CO1 - Small STD" # <--- Replace with Cloudstack Compute Offering
+      ephemeral_disk_offering: "ephemeral" # <--- Replace with Cloudstack Storage Offering
       disk: 8192       
 
-
-
-
+networks:
+- name: private
+  type: manual 
+  subnets:     
+  - range: 10.203.7.254/23
+    gateway: 10.203.7.254 
+    dns: [10.203.6.3]     
+    cloud_properties: {name: NET_CS} # <--- Replace with Cloudstack Network name
 
 
 
