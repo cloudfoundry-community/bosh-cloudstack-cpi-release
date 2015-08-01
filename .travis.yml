@@ -7,13 +7,13 @@ install:
 rvm:
 - ruby-2.1.2
 script: 'bosh create release --force --name bosh-cloudstack-cpi --version 0+dev.1 --with-tarball '
-deploy:
-  provider: releases
-  api_key:
-    secure: xk2yTstUFnF7O1GSH6xfOdJzmZRipzGfuwLDe+ASggF3JrJpOQweW1/yR8Cb1+5LpMrueNXOWByQlyjflbuLLpliipvfoUlE79m7g5i3lIUOq2F0x1OGFz5O0PmOPhYjOl3SDbZJJVMAcmyBVeHIL3powKwT0xP+UaZgHnrKrMYlB7IFQjHmGgDIA0z7oWID4Fu/JJAeu8tNpSkIfNuD53qlK8pR8TZv4Ad6YMJ7D365hIaAxHwpaYsfkgAYOPTfc+gEp04+hjxPsHz6CKDN2QEp40QJnYcl1YuYVg4RlXG1AL0FxHOIA0Zp70dYd6C7zVYgC2cpln4JfdgBHAsx74nqKz9CD6i2m8SXUeDulz6TuHZqKd4WfyLSuMhF1m7MI3lG5uWxbEm8RX5+aJAPhcR8ibARbjgvc5AA2KxtJxqiUrzo6ZeNCODvtpA71d0VfMDAb/rprYlaiozLk9uqc9A1FtBYpLwr3vrw3T8viF+0JNBo3gLmjfgs6G0zpFFmINrr8YT9kIj7KIeNfUTyj2xbgkOHyMeSdOwo29bJZMCC7ZBFjLhwASpxfk8f1nTXL9Gw4l65zIGEaoGHxey23LCIM/aMRU+zdktuvwVZAcYK8r2iXaW2Qs2JXrck+tA1cYOMhmhx4vfVwsIRnQw5NJcjZMwoQ5tjt+KA8bvTkLw=
-  file: /home/travis/build/cloudfoundry-community/bosh-cloudstack-cpi-release/dev_releases/bosh-cloudstack-cpi/bosh-cloudstack-cpi-0+dev.1.tgz
-  on:
-    repo: cloudfoundry-community/bosh-cloudstack-cpi-release
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure: xk2yTstUFnF7O1GSH6xfOdJzmZRipzGfuwLDe+ASggF3JrJpOQweW1/yR8Cb1+5LpMrueNXOWByQlyjflbuLLpliipvfoUlE79m7g5i3lIUOq2F0x1OGFz5O0PmOPhYjOl3SDbZJJVMAcmyBVeHIL3powKwT0xP+UaZgHnrKrMYlB7IFQjHmGgDIA0z7oWID4Fu/JJAeu8tNpSkIfNuD53qlK8pR8TZv4Ad6YMJ7D365hIaAxHwpaYsfkgAYOPTfc+gEp04+hjxPsHz6CKDN2QEp40QJnYcl1YuYVg4RlXG1AL0FxHOIA0Zp70dYd6C7zVYgC2cpln4JfdgBHAsx74nqKz9CD6i2m8SXUeDulz6TuHZqKd4WfyLSuMhF1m7MI3lG5uWxbEm8RX5+aJAPhcR8ibARbjgvc5AA2KxtJxqiUrzo6ZeNCODvtpA71d0VfMDAb/rprYlaiozLk9uqc9A1FtBYpLwr3vrw3T8viF+0JNBo3gLmjfgs6G0zpFFmINrr8YT9kIj7KIeNfUTyj2xbgkOHyMeSdOwo29bJZMCC7ZBFjLhwASpxfk8f1nTXL9Gw4l65zIGEaoGHxey23LCIM/aMRU+zdktuvwVZAcYK8r2iXaW2Qs2JXrck+tA1cYOMhmhx4vfVwsIRnQw5NJcjZMwoQ5tjt+KA8bvTkLw=
+#  file: /home/travis/build/cloudfoundry-community/bosh-cloudstack-cpi-release/dev_releases/bosh-cloudstack-cpi/bosh-cloudstack-cpi-0+dev.1.tgz
+#  on:
+#    repo: cloudfoundry-community/bosh-cloudstack-cpi-release
 env: 
 addons:
   code_climate: 
