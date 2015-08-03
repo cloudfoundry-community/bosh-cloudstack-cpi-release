@@ -18,6 +18,9 @@ cloudstack:
 cpi:
   ephemeral_disk_offering: ephemeral_volume
   existing_template_name: "Ubuntu Precise amd64 [2015-06-01]"
+  webdav_host: localhost
+  webdav_port: 8080
+  webdav_directory: "/var/vcap/data/cpi-core"   #target the ephemeral disk  
 
 logging:
   level: DEBUG
