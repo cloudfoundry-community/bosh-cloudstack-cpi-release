@@ -19,9 +19,9 @@ cpi:
   ephemeral_disk_offering: ephemeral_volume
   mock_create_stemcell: false  
   existing_template_name: "Ubuntu Precise amd64 [2015-06-01]"
-  webdav_host: 127.0.0.1
-  webdav_port: 8080
-  webdav_directory: "/var/vcap/data/cpi-core"   #target the ephemeral disk  
+  webdav_host: <%= p('cpi.webdav_host') %>
+  webdav_port: <%= p('cpi.webdav_port') %>
+  webdav_directory: <%= p('cpi.webdav_directory') %>  
 
 logging:
   level: DEBUG

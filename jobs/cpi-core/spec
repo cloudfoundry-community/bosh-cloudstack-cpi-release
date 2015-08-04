@@ -66,3 +66,16 @@ properties:
     description:
       port the cpi core rest server is listening on
     default : 8080      
+  cpi.webdav_host:
+    description:
+      webdav server to offer template to cloudstack api. Should be set to bosh server ip address
+    default : 127.0.0.1
+  cpi.webdav_port:
+    description:
+      webdav port to offer template to cloudstack api
+    default : 8080
+  cpi.webdav_directory:
+    description:
+      webdav filesystem dir. defaults to persistent disk location
+    default : /var/vcap/store/cpi-core
+    
