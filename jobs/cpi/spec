@@ -4,6 +4,8 @@ templates:
   cpi-core.erb: bin/cpi-core
   cpi.erb: bin/cpi
   application.yml.erb: config/application.yml
+  logback.xml.erb: config/logback.xml
+  
 packages:
 - cpi-common
 - cpi-java
