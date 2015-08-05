@@ -1,5 +1,5 @@
 ---
-name: cpi-core
+name: cpi
 templates:
   cpi-core.erb: bin/cpi-core
   cpi.erb: bin/cpi

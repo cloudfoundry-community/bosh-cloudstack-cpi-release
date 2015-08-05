@@ -49,7 +49,7 @@ jobs:
   - {name: director, release: bosh} 
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}      
-  - {name: cpi-core, release: bosh-cloudstack-cpi}
+  - {name: cpi, release: bosh-cloudstack-cpi}
 
   resource_pool: vms
   persistent_disk_pool: disks
@@ -86,7 +86,7 @@ jobs:
       address: 127.0.0.1
       name: my-bosh     
       db: *db           
-      cpi_job: cpi-core 
+      cpi_job: cpi 
       max_threads: 4    
       # check cloudstack cpi support. Enabling it will fail the jobs restarts. "undefined method `cid' for nil:NilClass"
       enable_snapshots: false                                                                                           

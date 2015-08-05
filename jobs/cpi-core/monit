@@ -1,5 +1,0 @@
-check process cpi-core
-  with pidfile /var/vcap/sys/run/cpi-core/cpi-core.pid
-  start program "/var/vcap/jobs/cpi-core/bin/cpi-core start"
-  stop program "/var/vcap/jobs/cpi-core/bin/cpi-core stop"
-  group vcap

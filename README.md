@@ -36,13 +36,13 @@ jobs:
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}
-  - {name: cpi-core, release: bosh-cloudstack-cpi}
+  - {name: cpi, release: bosh-cloudstack-cpi}
 
 
 # activate external cpi
 properties:
   director:
-    cpi_job: cpi-core
+    cpi_job: cpi
 
 # set external cpi credentials
    cloudstack:
