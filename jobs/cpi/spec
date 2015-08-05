@@ -44,7 +44,7 @@ properties:
   cloudstack.proxy_host:
     description:
       host to the proxy e.g. 192.168.1.1. Usefull to reach cloudstack api behind proxy. No proxy if no set
-      default: ""
+    default: "" 
   cloudstack.proxy_port:
     description:
       port to the proxy
