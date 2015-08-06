@@ -23,7 +23,7 @@ cd $JOB_DIR
 # -jar /var/vcap/packages/cpi-core/cloudstack-cpi-core.jar
 
 exec $JAVA_HOME/bin/java  \
--server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> \
+-server -XX:+UseG1GC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=25 -Xms128M -Xmx<%= p('cpi.heap_size') %> -Dlogback.configurationFile=$JOB_DIR/config/logback.xml \
 -jar /var/vcap/packages/cpi-core/cloudstack-cpi-core.jar
 
 
