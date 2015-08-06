@@ -80,5 +80,5 @@ properties:
   cpi.webdav_directory:
     description:
       webdav filesystem dir. defaults to persistent disk location
-    default : /var/vcap/store/cpi
+    default : /var/vcap/store/cpi/webdav
     
