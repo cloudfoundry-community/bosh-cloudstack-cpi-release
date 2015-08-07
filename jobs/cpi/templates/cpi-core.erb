@@ -33,7 +33,9 @@ exec $JAVA_HOME/bin/java  \
 ;;
 
 stop)
-kill_and_wait $PIDFILE
+#kill_and_wait $PIDFILE
+kill -SIGTERM `cat $PIDFILE`
+
 
 ;;
 
