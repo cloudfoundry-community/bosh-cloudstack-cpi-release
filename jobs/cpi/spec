@@ -81,4 +81,16 @@ properties:
     description:
       webdav filesystem dir. defaults to persistent disk location
     default : /var/vcap/store/cpi/webdav
+  registry.endpoint:
+    description:
+      host the bosh registry is listening on
+    default : http://127.0.0.1:25889
+  registry.user:
+    description:
+      user for bosh registry
+    default : admin
+  registry.password:
+    description:
+      password for bosh registry
+    default : admin
     

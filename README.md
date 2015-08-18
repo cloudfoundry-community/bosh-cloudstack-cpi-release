@@ -13,8 +13,10 @@ This is work in progress / feedbacks welcome (use issues).
 * leverages Apache Jclouds support for CloudStack, nice java adapter for Cloudstack API
 * supports Cloudstack advanced zone
 * secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
-* TBC: uses an http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant).
+* Uses a webdav http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant). This webdav server is started from the spring boot cpi core jvm
+
 * Out of Scope : security groups provisioning / CS Basic Zones
+
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
 
