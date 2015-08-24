@@ -16,9 +16,8 @@ cloudstack:
   proxy_password: <%= p('cloudstack.proxy_password') %>
 
 cpi:
-  ephemeral_disk_offering: ephemeral_volume
-  mock_create_stemcell: false  
-  existing_template_name: "Ubuntu Precise amd64 [2015-06-01]"
+  mock_create_stemcell: <%= p('cpi.mock_create_stemcell') %>
+  existing_template_name: <%= p('cpi.existing_template_name') %>
   webdav_host: <%= p('cpi.webdav_host') %>
   webdav_port: <%= p('cpi.webdav_port') %>
   webdav_directory: <%= p('cpi.webdav_directory') %>  
