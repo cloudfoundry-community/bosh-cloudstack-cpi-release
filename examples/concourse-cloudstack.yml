@@ -2,7 +2,7 @@
 name: concourse
 
 # replace with bosh status --uuid
-director_uuid: bc903999-bb89-48e1-b497-9de0236c38e0
+director_uuid: 15ce6ced-2007-4b1b-a6b2-82d37c611f39
 
 # pick a sane db name and password
 atc_db_name: &atc-db-name atc
@@ -17,16 +17,18 @@ networks:
   - name: concourse
     type: manual
     subnets:
-      - range: 192.168.117.0/24
-        gateway: 192.168.117.254 
-        dns: [10.203.6.102]
+      - range: 10.234.228.128/26
+        gateway: 10.234.228.129
+        dns: [10.234.50.180,10.234.71.124]
         reserved: 
-        - 192.168.117.1 - 192.168.117.239
-        - 192.168.117.245 - 192.168.117.253
+        - 10.234.228.1 - 10.234.228.158
+        - 10.234.228.160 - 10.234.228.253
 
         static:
-          - &discovery_static_ip 192.168.117.240
-        cloud_properties: {name: TRANSPARENT_NET }
+          - &discovery_static_ip 10.234.228.159
+        cloud_properties: {name: "3112 - preprod - back"} # <--- Replace with Network name
+
+
 
 releases:
   - name: concourse
