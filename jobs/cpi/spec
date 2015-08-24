@@ -83,8 +83,8 @@ properties:
     default : /var/vcap/store/cpi/webdav
   registry.endpoint:
     description:
-      host the bosh registry is listening on
-    default : http://127.0.0.1:25889
+      host the bosh registry is listening on. must be the IP of the director to be reached from bosh agents
+    default : http://127.0.0.1:8080
   registry.user:
     description:
       user for bosh registry
