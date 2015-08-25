@@ -36,6 +36,9 @@ spring:
     show-banner: false
   datasource:
     url:  jdbc:hsqldb:file:/var/vcap/store/cpi/db
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 
 pidfile: /var/vcap/sys/run/cpi/cpi.pid
