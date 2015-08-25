@@ -34,6 +34,9 @@ logging:
 spring:
   main:
     show-banner: false
+  datasource:
+    url:  jdbc:hsqldb:file:/var/vcap/store/cpi
+
 
 pidfile: /var/vcap/sys/run/cpi/cpi.pid
 
