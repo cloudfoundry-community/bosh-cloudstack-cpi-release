@@ -88,16 +88,16 @@ properties:
   cpi.existing_template_name:
     description:
       The cloudstack template name the CPI should use, if mock mode is true
-    default: "bosh-stemcell-3033-po2.vhd.bz2"
-  registry.endpoint:
+    default: "bosh-stemcell-3033-po4.vhd.bz2"
+  cpi.registry.endpoint:
     description:
       host the bosh registry is listening on. must be the IP of the director to be reached from bosh agents
     default : http://127.0.0.1:8080
-  registry.user:
+  cpi.registry.user:
     description:
       user for bosh registry
     default : admin
-  registry.password:
+  cpi.registry.password:
     description:
       password for bosh registry
     default : admin
