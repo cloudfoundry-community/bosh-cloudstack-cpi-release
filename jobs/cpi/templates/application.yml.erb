@@ -27,14 +27,14 @@ cpi:
     user: <%= p('cpi.registry.user') %>
     password: <%= p('cpi.registry.password') %>
 
+
 blobstore:
-  provider: local
+  provider: <%= p('blobstore.provider') %>
   path: /var/vcap/micro_bosh/data/cache
   options:
-    endpoint: http://10.234.228.199:25250
-    user: director
-    password: director-password
-       
+    endpoint: http://<%= p('blobstore.address') %>:<%= p('blobstore.port') %>
+    user: <%= p('blobstore.agent.user') %>
+    password: <%= p('blobstore.agent.password') %>
 
 logging:
   level: DEBUG
