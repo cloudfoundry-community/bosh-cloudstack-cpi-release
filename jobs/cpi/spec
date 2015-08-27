@@ -102,35 +102,32 @@ properties:
       password for bosh registry
     default: admin
     
-    cpi.blobstore.provider:
-      description: 
-        local for micro bosh and bosh-init or dav provider for full bosh
-      default: local
+  cpi.blobstore.provider:
+    description: 
+      local for micro bosh and bosh-init or dav provider for full bosh
+    default: local
     
-    cpi.blobstore.path:
-      description:
-        path for local provider
-      default: /var/vcap/micro_bosh/data/cache
+  cpi.blobstore.path:
+    description:
+      path for local provider
+    default: /var/vcap/micro_bosh/data/cache
 
-    cpi.blobstore.address:
-      description:
-        ip of blobstore
-      default: 0.0.0.0
+  cpi.blobstore.address:
+    description:
+      ip of blobstore
+    default: 0.0.0.0
 
-    cpi.blobstore.port:
-      description:
-        port of blobstore
-      default: 0
+  cpi.blobstore.port:
+    description:
+      port of blobstore
+    default: 0
 
-    cpi.blobstore.agent.user:
-      description:
-        agent user for blobstore
-      default: agent
+  cpi.blobstore.agent.user:
+    description:
+      agent user for blobstore
+    default: agent
 
-    cpi.blobstore.agent.password:
-      description:
-        password user for blobstore
-      default: agent-password
-
-    
-    
+  cpi.blobstore.agent.password:
+    description:
+      password user for blobstore
+    default: agent-password
