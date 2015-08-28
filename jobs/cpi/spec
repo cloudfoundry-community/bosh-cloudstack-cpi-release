@@ -134,7 +134,7 @@ properties:
 
   cpi.ntp:
     description:
-      ntp server list (same as director) eg : [10.234.50.245 ,10.234.50.246]
+      "ntp server list (same as director) eg : [10.234.50.245 ,10.234.50.246]"
 
   cpi.agent.mbus:
     description:
