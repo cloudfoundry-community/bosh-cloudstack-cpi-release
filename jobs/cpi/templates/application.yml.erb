@@ -36,7 +36,8 @@ cpi:
       user: <%= p('cpi.blobstore.agent.user') %>
       password: <%= p('cpi.blobstore.agent.password') %>
   
-  agent: <%= p('cpi.agent') %>
+  agent:
+    mbus: <%= p('cpi.agent.mbus') %>
   ntp: <%= p('cpi.ntp') %>   
 
 logging:
