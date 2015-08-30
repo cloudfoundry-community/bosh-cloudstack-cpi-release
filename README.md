@@ -17,6 +17,71 @@ This is work in progress / feedbacks welcome (use issues).
 
 * Out of Scope : security groups provisioning / CS Basic Zones
 
+## Current Status:
+
+
+
+### Global status
+* micro-bosh creation (with an externally launched cpi-core process)
+* compilation vms ok, blobstore ok
+* bosh-master creation from micro-bosh
+* concourse creation from bosh-master
+	
+### Issues
+* local storage issues (persistent disks happen to not be on the same host as vm when reconfiguring a deployment)
+* ip conflicts when recreating vm, due to cloudstack expunge delay (orig vm is destroyed but ip not yet releases)
+* disk / mount issues (probably related to vm expunge delay)
+* stemcell agent.json user data url is hardcoded. must find a way to find the correct cloudstack userdata url on the fly
+* stemcell : cant get keys from cloudstack metadata (requires stemcell code change to match cloudstack)
+* no support for vip / floating ip yet	
+
+
+## TODO
+
+* run Director BATS against the cpi
+	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
+
+* expunge vm
+	required with static ip vms (ip not freed until vm is expunged)
+	default value expunge.delay = 300 (5 mins)
+	option 1
+		reduce to 30s as cloudstack admin => need to restart management server 
+		wait 30s in CPI after vm delete
+	option2
+		expunge with cloudstack API. option not avail in jclouds 1.9, use escaping mechanism to add the expunge flag?
+* check template publication
+	from cpi-core webdav, only public template possible ?
+	validate publication state (instant OK for registering, need to wait for the ssvm (secondary storage vm) to copy the template
+	connectivity issue when cloudstack tries asynchronously to copy template : vlan opened, dedicated chunk encoding compatible spring boot endpoint
+	(workaround: mock template mode in cpi. copies an existing template and use it as a stemcell image)
+	
+	add a garbarge collection mechanism to the webdav server (remove old templates when consumed by cloudstack)	
+
+* use isolated / dedicated networks for bosh vms
+	http://www.shapeblue.com/using-the-api-for-advanced-network-management/
+	static API assigned through API deployVirtualMachine	
+
+* persist bosh registry.
+	now hsqldb
+	set persistent file in /var/vcap/store/cpi
+	TBC : use bosh postgres db (add postgres jdbc driver + dialect config + bosh *db credentials injection)
+
+
+* globals
+	harden Exception mangement
+	map spring boot /error to an intelligible CPI rest payload / stdout
+	update json reference files for unit tests
+
+	
+
+* provision ssh keys
+	generate keypair with cloudstack API (no support on portail)
+	use keypair name + private key in bosh.yml
+	see http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair
+	see http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html
+
+
+
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
 
