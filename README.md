@@ -113,7 +113,7 @@ properties:
 
 # set external cpi credentials
    cloudstack:
-      endpoint: <your_end_point_url> # Ask for your administrator
+      endpoint: <your_cloudstack api end_point_url> # Ask for your administrator
       api_key: <your_api_key> # You can find at your user page
       secret_access_key: <your_secret_access_key> # Same as above
       default_key_name: <default_keypair_name> # Your keypair name (see the next section)
@@ -126,6 +126,46 @@ properties:
       proxy_port: <proxy port>
       proxy_user: <proxy user>
       proxy_password: <proxy password>
+      
+	  cpi:
+	    webdav_host: *bosh_static_ip
+	    mock_create_stemcell: true
+	    existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
+	
+	    registry:
+	      endpoint: http://<bosh_ip>:8080
+	
+	    blobstore:
+	        address: *bosh_static_ip
+	        port: 25251
+	        provider: dav
+	        agent: {user: agent, password: agent-password}
+	    agent:
+	      mbus: "nats://nats:nats-password@<bosh_ip>:4222"
+	    ntp: ""
+       
+      
+      
+# define disk_pool, refering to cloudstack disk offering      
+disk_pools:
+- name: disks
+  disk_size: 10000
+  cloud_properties:
+    disk_offering: "DO2 - Medium STD" #<--- Replace with your disk offering name for persistent disk
+      
+# define vm pool, refering to cloudstack compute offering      
+resource_pools:
+- name: vms
+  stemcell:
+    name: bosh-cloudstack-xeb-ubuntu-trusty-go_agent-raw
+    version: latest
+  network: private
+  size: 1
+  cloud_properties:
+    compute_offering: "CO1 - Small STD" #<--- Replace with your compute offering name
+    disk: 20000
+    ephemeral_disk_offering : "DO2 - Medium STD" #<--- Replace with the disk offering u want for ephemeral disk
+      
       
 ```
 
