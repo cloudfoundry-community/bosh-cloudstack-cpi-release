@@ -103,13 +103,13 @@ jobs:
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}
-  - {name: cpi, release: bosh-cloudstack-cpi}
+  - {name: cpi, release: bosh-cloudstack-cpi} # <--
 
 
 # activate external cpi
 properties:
   director:
-    cpi_job: cpi
+    cpi_job: cpi  
 
 # set external cpi credentials
    cloudstack:
@@ -170,40 +170,30 @@ resource_pools:
 ```
 
 
-Typical bosh manifest to deploy on cloudstack
+## Typical bosh-int configuration to create a micro-bosh with CloudStack external CPI
+
+bosh-init configuration : micro-bosh.yml
+
+* necessary configuration to activate on the TARGET bosh (micro-bosh) ie : CPI used from micro-bosh to create other deployments
+* bosh init must use the cpi external release, and have the necessary configuration to create the microbosh vm. 
+
+
+cpi-core config: application.yml
+** expose a webdav server (used by cloudstack iaas to get the template extracted from the stemcell)
+** expose a registry to the microbosh vm for bootstrapping purpose. cpi-core will generate the correct json setting. Bosh agents will copy it to /var/vcap/bosh/settings.json 
+** generate adequate vm userdata when creating the vm, giving registry endpoint
+
+*The cpi-core must be launched separately,see the inception directory, which provides a sample script and application.yml configuration.
+
+
+As the bosh-init bootsrapping is quite cumbersome, its recommended to provision a bosh deployment from the microbosh and operate from that full managed bosh (best practice anyway).
+
+
 
 ```yml
 
 
 ---
-name: xxx
-director_uuid: zzzz
-
-disk_pools:
-  - name: d-pool
-    disk_size: 10240
-    cloud_properties: 
-      type: gp2
-
-resource_pools:
-  - name: vm-pool
-    network: net
-    stemcell: 
-      name: bosh-cloudstack-xen-ubuntu-trusty-go_agent
-      version: latest
-    cloud_properties:
-      compute_offering: "CO1 - Small STD" # <--- Replace with Cloudstack Compute Offering
-      ephemeral_disk_offering: "ephemeral" # <--- Replace with Cloudstack Storage Offering
-      disk: 8192       
-
-networks:
-- name: private
-  type: manual 
-  subnets:     
-  - range: 10.203.7.254/23
-    gateway: 10.203.7.254 
-    dns: [10.203.6.3]     
-    cloud_properties: {name: NET_CS} # <--- Replace with Cloudstack Network name
 
 
 
