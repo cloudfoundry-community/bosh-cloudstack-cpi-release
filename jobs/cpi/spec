@@ -89,6 +89,15 @@ properties:
     description:
       The cloudstack template name the CPI should use, if mock mode is true
     default: "bosh-stemcell-3033-po4.vhd.bz2"
+    
+  cpi.default_disk_offering:
+    description:
+      default disk offering to use if not specified (ie not disk_pool, just persistent tag
+    
+  cpi.default_ephemeral_disk_offering:
+    description:
+      default disk offering to use if not specified (ie not disk_pool, just persistent tag
+  
   cpi.registry.endpoint:
     description:
       host the bosh registry is listening on. must be the IP of the director to be reached from bosh agents
