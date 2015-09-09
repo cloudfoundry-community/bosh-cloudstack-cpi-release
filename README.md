@@ -179,14 +179,14 @@ bosh-init configuration : micro-bosh.yml
 
 
 cpi-core config: application.yml
-** expose a webdav server (used by cloudstack iaas to get the template extracted from the stemcell)
-** expose a registry to the microbosh vm for bootstrapping purpose. cpi-core will generate the correct json setting. Bosh agents will copy it to /var/vcap/bosh/settings.json 
-** generate adequate vm userdata when creating the vm, giving registry endpoint
+* exposes a webdav server (used by cloudstack iaas to get the template extracted from the stemcell)
+* exposes a registry to the microbosh vm for bootstrapping purpose. cpi-core will generate the correct json setting. Bosh agents will copy it to /var/vcap/bosh/settings.json 
+* generates adequate vm userdata when creating the vm, giving registry endpoint
 
-*The cpi-core must be launched separately,see the inception directory, which provides a sample script and application.yml configuration.
+The cpi-core must be launched separately, see the inception directory which provides a sample script and application.yml configuration.
 
 
-As the bosh-init bootsrapping is quite cumbersome, its recommended to provision a bosh deployment from the microbosh and operate from that full managed bosh (best practice anyway).
+As the bosh-init bootstrapping is quite cumbersome, its recommended to provision a bosh deployment from the microbosh and operate from that full managed bosh (best practice anyway).
 
 
 
