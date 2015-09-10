@@ -57,8 +57,8 @@ This is work in progress / feedbacks welcome (use issues).
 	
 	add a garbarge collection mechanism to the webdav server (remove old templates when consumed by cloudstack)	
 
-* use isolated / dedicated networks for bosh vms
-	http://www.shapeblue.com/using-the-api-for-advanced-network-management/
+* use isolated / dedicated networks for bosh vms [avanced-network](http://www.shapeblue.com/using-the-api-for-advanced-network-management)
+	/
 	static API assigned through API deployVirtualMachine	
 
 * persist bosh registry.
@@ -77,8 +77,8 @@ This is work in progress / feedbacks welcome (use issues).
 * provision ssh keys
 	generate keypair with cloudstack API (no support on portail)
 	use keypair name + private key in bosh.yml
-	see http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair
-	see http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html
+	see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
+	see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
 
 
 
@@ -128,9 +128,11 @@ properties:
       proxy_password: <proxy password>
       
 	  cpi:
-	    webdav_host: *bosh_static_ip
-	    mock_create_stemcell: true
-	    existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
+        webdav_host: *bosh_static_ip
+        mock_create_stemcell: true
+        existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
+        default_disk_offering: "DO1 - Small STD" 
+        default_ephemeral_disk_offering: "DO1 - Small STD"  
 	
 	    registry:
 	      endpoint: http://<bosh_ip>:8080
