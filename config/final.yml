@@ -1,5 +1,4 @@
 --- 
-final_name: bosh-cloudstack-cpi
 min_cli_version: 1.0.3
 blobstore: 
   provider: s3
