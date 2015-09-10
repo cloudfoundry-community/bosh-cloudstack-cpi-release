@@ -1,0 +1,30 @@
+---
+packages:
+- name: cpi-common
+  version: 9735c7e805e628233c936fb318f5a9eda6f861ca
+  fingerprint: 9735c7e805e628233c936fb318f5a9eda6f861ca
+  sha1: e9f51fe3c8efeab9a5b0f507446fd043df973017
+  dependencies: []
+- name: cpi-core
+  version: 207cafa172674a32fbccf201abb6c77b03aebfba
+  fingerprint: 207cafa172674a32fbccf201abb6c77b03aebfba
+  sha1: f9399f680a6ea7fd0fb0497e1a26438f9af6c682
+  dependencies: []
+- name: cpi-java
+  version: 4011698a38ead99a5a561b43451bbbeeb1e3bfd1
+  fingerprint: 4011698a38ead99a5a561b43451bbbeeb1e3bfd1
+  sha1: 2340b7965786f6268e1ee47ec8efe197b01dacbc
+  dependencies: []
+jobs:
+- name: cpi
+  version: e77189d129d0ed1d030bd973d80f38599d8e67a3
+  fingerprint: e77189d129d0ed1d030bd973d80f38599d8e67a3
+  sha1: a149de7d670b6423721d00f031f94b66ea56b415
+license:
+  version: 0fbc9511a7e7f3a4d2f1af47f5ed327237b5f06c
+  fingerprint: 0fbc9511a7e7f3a4d2f1af47f5ed327237b5f06c
+  sha1: 9b4c16d3a689bae46dfc240b961bd65578cc654e
+commit_hash: 5a8a2d1d
+uncommitted_changes: true
+name: bosh-cloudstack-cpi-release
+version: '1'
