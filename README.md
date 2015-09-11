@@ -132,7 +132,8 @@ properties:
         mock_create_stemcell: true
         existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
         default_disk_offering: "DO1 - Small STD" 
-        default_ephemeral_disk_offering: "DO1 - Small STD"  
+        default_ephemeral_disk_offering: "DO1 - Small STD"
+        vm_expunge_delay: 40 # <-- set to 40s. default is 30s after vm delete.  
 	
 	    registry:
 	      endpoint: http://<bosh_ip>:8080
