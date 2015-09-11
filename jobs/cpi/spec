@@ -98,6 +98,14 @@ properties:
     description:
       default disk offering to use if not specified (ie not disk_pool, just persistent tag
   
+  cpi.vm_expunge_delay:
+    description:
+      delay (in seconds) the cpi will wait after vm deletion. Should match cloudstack expunge delay to prevent ip reuse conflicts
+    default: 30
+  
+  
+  
+  
   cpi.registry.endpoint:
     description:
       host the bosh registry is listening on. must be the IP of the director to be reached from bosh agents
