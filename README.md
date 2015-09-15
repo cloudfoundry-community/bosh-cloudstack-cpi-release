@@ -29,7 +29,7 @@ This is work in progress / feedbacks welcome (use issues).
 
 * detailed diagram sequence
 
-![Alt text](http://plantuml.com:80/plantuml/png/TLBBJiCm43oJhrYLQ_i3L4A2baD5KL4fN2l7tYPMcwnbRqBvUzRkCoaSFPwPdLaxfpqCfhFbosIrM0woEwSyMssTgXcCzQYPV8QrWPpsMHx9a_VP0ExdjYZvUTTWLwATlG7McZncS8tc5Cgrny86zZyz-_dYS_gnUfgyzjBe7JKciDBRBjvwQXXx8R_U_i_OLjrp2gCAhFdiSMeEeyVO01v0UrICwxOQPn4uuAcPN7eCgMcFTRYEr7FqivEa02NJce1-P1IhhgAp815j44q2uGGA_-8gYkCQX5lO5fCl77sxl4eepbDhWwKQObIbsRQ7J9bSdyQdbGXPe9n8PYe7jWPJQZS4yVCS4d6KYEFiIjJDWto9C-nLKyR8za9VtUyl7d4OyId6XePWdSYZEctIsB2zyKbjvIsftjYYaTtMoD_ajp6_V02n-5DHKIEdw9e-Ykm9NOaLUhLBSyQ_)
+![Alt text](http://plantuml.com:80/plantuml/png/ZPFHZjem44MVcwyOqLVuWIAjrBAh2YqhLfJs5Jdsa5Wa6SkU1FZxJXmen4khFcPyviwzOoUd4qoUbvkNnNQzcMIVdF9ijNMgOJ3MesRo6JO6SZfbUGyltfSJ-BooHSdVgXR7BThP3uMT9eyPm7qvfr3kF1Osi3ydPqVCZUgIeQlrp-SVsw-BryIZhgWrWPK-ZEkTfvOniVxhxU_Ekthy7Hsg0Xl-ev5T5mApfpuOV07jKJ7k0cEjiQgolZeSnjIFYU58i26fG7Xo5124SPNG8-YMKC1XPUZlqDlnlMB9xE3xo_O_D8_ACkpffYbJb3d_8svNpnyazHZYVIVKuw438ri79Tjj0_gPKQp67QDN8arxH1EBS2tEa_oNQnUsi1r6NRZeZhbQ4EUfiy5I0xrLfTbsWwTCZg_ZunCGM4evaSnK3cm3fjHk2gBdEKHm5i5vTjSqzeDyipDDeYbZP7iXxKxpYqO_ZFXgOqzJi4xQ--wuIMF3uODEJ2jtIStU5gtija4-aZ_q_kN1YyJ3ZffQ-UfLuuyXUq9NOerULN7E_3S0)
 
 <!-- source of the diag
   @startuml
@@ -39,7 +39,8 @@ This is work in progress / feedbacks welcome (use issues).
   box "CPI" #LightBlue
 	participant cpi
 	participant cpi_core
-   participant bosh_registry
+    participant bosh_registry
+    participant webdav
   end box
   box "CLOUDSTACK"
 	participant cloudstack
@@ -49,6 +50,14 @@ This is work in progress / feedbacks welcome (use issues).
 	participant vm
 	participant bosh_agent
   end box
+  
+  director -> cpi : create_stemcell
+  cpi -> cpi_core : create_stemcell
+  cpi_core -> webdav : expose template
+  cpi_core -> cloudstack : register template
+  cloudstack -> webdav : http GET template
+  cpi_core -> cloudstack : wait for template ready
+  
   director -> cpi : create_vm;
   cpi -> cpi_core : rest cpi create_vm;
   cpi_core -> cloudstack : create vm and user-data;
@@ -61,8 +70,7 @@ This is work in progress / feedbacks welcome (use issues).
   bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
   bosh_agent -> vm : reconfigure network static ip;
   bosh_agent -> vm : mount and partion ephemeral disk;
-  @enduml
--->
+  @enduml-->
 		
 
 
