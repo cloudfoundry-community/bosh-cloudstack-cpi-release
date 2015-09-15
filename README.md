@@ -29,24 +29,26 @@ This is work in progress / feedbacks welcome (use issues).
 
 * detailed diagram sequence
 
-![Alt text](http://g.gravizo.com/g?
-  @startuml;
-  box "DIRECTOR";
-	participant director;
-  end box;
-  box "CPI" #LightBlue;
-	participant cpi;
-	participant cpi_core;
-   participant bosh_registry;
-  end box;
-  box "CLOUDSTACK";
-	participant cloudstack;
-	participant vrouter;
-  end box;
-  box "VM" #LightBlue;
-	participant vm;
-	participant bosh_agent;
-  end box;
+![Alt text](http://plantuml.com:80/plantuml/png/TLBBJiCm43oJhrYLQ_i3L4A2baD5KL4fN2l7tYPMcwnbRqBvUzRkCoaSFPwPdLaxfpqCfhFbosIrM0woEwSyMssTgXcCzQYPV8QrWPpsMHx9a_VP0ExdjYZvUTTWLwATlG7McZncS8tc5Cgrny86zZyz-_dYS_gnUfgyzjBe7JKciDBRBjvwQXXx8R_U_i_OLjrp2gCAhFdiSMeEeyVO01v0UrICwxOQPn4uuAcPN7eCgMcFTRYEr7FqivEa02NJce1-P1IhhgAp815j44q2uGGA_-8gYkCQX5lO5fCl77sxl4eepbDhWwKQObIbsRQ7J9bSdyQdbGXPe9n8PYe7jWPJQZS4yVCS4d6KYEFiIjJDWto9C-nLKyR8za9VtUyl7d4OyId6XePWdSYZEctIsB2zyKbjvIsftjYYaTtMoD_ajp6_V02n-5DHKIEdw9e-Ykm9NOaLUhLBSyQ_)
+
+<!-- source of the diag
+  @startuml
+  box "DIRECTOR"
+	participant director
+  end box
+  box "CPI" #LightBlue
+	participant cpi
+	participant cpi_core
+   participant bosh_registry
+  end box
+  box "CLOUDSTACK"
+	participant cloudstack
+	participant vrouter
+  end box
+  box "VM" #LightBlue
+	participant vm
+	participant bosh_agent
+  end box
   director -> cpi : create_vm;
   cpi -> cpi_core : rest cpi create_vm;
   cpi_core -> cloudstack : create vm and user-data;
@@ -60,7 +62,7 @@ This is work in progress / feedbacks welcome (use issues).
   bosh_agent -> vm : reconfigure network static ip;
   bosh_agent -> vm : mount and partion ephemeral disk;
   @enduml
-)
+-->
 		
 
 
