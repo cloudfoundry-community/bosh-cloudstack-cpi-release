@@ -21,9 +21,10 @@ This is work in progress / feedbacks welcome (use issues).
 ![Alt text](http://g.gravizo.com/g?
   digraph G {
     aize ="4,4";
-	cpi -> cpi-core
-	cpi-core -> cpi-bosh-registry
-	cpi-core -> cloudstack
+    bosh_director -> cpi
+	cpi -> cpi_core
+	cpi_core -> bosh_registry
+	cpi_core -> cloudstack
   }
 )
 
