@@ -15,8 +15,6 @@ This is work in progress / feedbacks welcome (use issues).
 * secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
 * Uses a webdav http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant). This webdav server is started from the spring boot cpi core jvm
 
-* Out of Scope : security groups provisioning / CS Basic Zones
-
 
 ![Alt text](http://g.gravizo.com/g?
   digraph G {
@@ -25,10 +23,11 @@ This is work in progress / feedbacks welcome (use issues).
 	cpi -> cpi_core
 	cpi_core -> bosh_registry
 	cpi_core -> cloudstack
+	cpi_core -> template_webdav_server
   }
 )
 
-
+* Out of Scope : security groups provisioning / CS Basic Zones
 
 
 ## Current Status:
