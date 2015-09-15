@@ -29,7 +29,7 @@ This is work in progress / feedbacks welcome (use issues).
 
 * detailed diagram sequence
 
-![Alt text](http://plantuml.com:80/plantuml/png/ZPFHZjem44MVcwyOqLVuWIAjrBAh2YqhLfJs5Jdsa5Wa6SkU1FZxJXmen4khFcPyviwzOoUd4qoUbvkNnNQzcMIVdF9ijNMgOJ3MesRo6JO6SZfbUGyltfSJ-BooHSdVgXR7BThP3uMT9eyPm7qvfr3kF1Osi3ydPqVCZUgIeQlrp-SVsw-BryIZhgWrWPK-ZEkTfvOniVxhxU_Ekthy7Hsg0Xl-ev5T5mApfpuOV07jKJ7k0cEjiQgolZeSnjIFYU58i26fG7Xo5124SPNG8-YMKC1XPUZlqDlnlMB9xE3xo_O_D8_ACkpffYbJb3d_8svNpnyazHZYVIVKuw438ri79Tjj0_gPKQp67QDN8arxH1EBS2tEa_oNQnUsi1r6NRZeZhbQ4EUfiy5I0xrLfTbsWwTCZg_ZunCGM4evaSnK3cm3fjHk2gBdEKHm5i5vTjSqzeDyipDDeYbZP7iXxKxpYqO_ZFXgOqzJi4xQ--wuIMF3uODEJ2jtIStU5gtija4-aZ_q_kN1YyJ3ZffQ-UfLuuyXUq9NOerULN7E_3S0)
+![Alt text](http://plantuml.com:80/plantuml/png/ZLJ1Rjim33rFNq5arsGVq203jhGOYdReq6Mx1hB4s6fiIP1a9_txKNAon8hJzcZoaNnyV79XzZ2vlN--MwwUdYVia-KkAA4irm6aSYY2SGorXCBiMH71or_t4_ZygCegVAzR79O8gou2Qs4SCe3pS65yjNPOAX_SQvRROI5vbmrzVFfp-tlrRVcGSHIrQQKFN6o7ySwPDc16_U_FwyoxPlYT6F8ITVZVWoqMu0Cs0kiQ5Wjsr0TcN-EUS0F28G-uFe9OZFR99C8ueayHh5-SGBYtnYCGnjQ47e1E2nEmLn3T6VIKFkzOXM3Xnztg0prtN0NOc5DFciBbQzg-QqW84-XetBwfGDVCHvPtw9CZCjGuZnuJHtBIl_NePf87FgmO-8YADeWo1U4Od6UI78n1s59rcFh2eUyGrn34EjCfhuo6I9MBeBgU4wFqSNmo2O5xSNfjb0PP2Jiblv2dV0BE4d3Epeg6V32Sw4oprRYKf9xFg_FzgOS_Ev7I6pC5PQayLYSbfVBRYpvfMxgbqHjLjgIjnh0pRXlvqvEW5gCLZMdfAtPDJuTqGbjXWuxNQSuykSQYyz6cwPVYjsyQ9m9ovrmaHmnpyekfsmRp0JV00y6gA_spv5LxjLR66McBce9NoVGDnyWCBACvdKkOfY49fmFz4vLtRtqW9C5Z24gNNrwyqHyuL3fLTXR6_W40)
 
 <!-- source of the diag
   @startuml
@@ -51,6 +51,7 @@ This is work in progress / feedbacks welcome (use issues).
 	participant bosh_agent
   end box
   
+== stemcell ==
   director -> cpi : create_stemcell
   cpi -> cpi_core : create_stemcell
   cpi_core -> webdav : expose template
@@ -58,6 +59,7 @@ This is work in progress / feedbacks welcome (use issues).
   cloudstack -> webdav : http GET template
   cpi_core -> cloudstack : wait for template ready
   
+== vm bootstrap ==
   director -> cpi : create_vm;
   cpi -> cpi_core : rest cpi create_vm;
   cpi_core -> cloudstack : create vm and user-data;
@@ -70,7 +72,22 @@ This is work in progress / feedbacks welcome (use issues).
   bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
   bosh_agent -> vm : reconfigure network static ip;
   bosh_agent -> vm : mount and partion ephemeral disk;
-  @enduml-->
+
+== persistent disk ==
+  director -> cpi : create_disk
+  cpi -> cpi_core: create_disk
+  cpi_core -> cloudstack: create volume
+  director -> cpi: attach_disk
+  cpi -> cpi_core: attach_disk
+  cpi_core -> bosh_registry : update disk list
+  cpi_core -> cloudstack: attach volume
+  director -> bosh_agent : nats command, reconfigure disk
+  bosh_agent -> bosh_registry : get updated setting.json
+  bosh_agent -> vm : mount and partition persistent disk
+
+
+  @enduml
+-->
 		
 
 
