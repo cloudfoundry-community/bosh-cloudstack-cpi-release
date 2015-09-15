@@ -15,7 +15,85 @@ This is work in progress / feedbacks welcome (use issues).
 * secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
 * Uses a webdav http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant). This webdav server is started from the spring boot cpi core jvm
 
+
+![Alt text](http://g.gravizo.com/g?
+  digraph G {
+    aize ="4,4";
+    bosh_director -> cpi
+	cpi -> cpi_core
+	cpi_core -> bosh_registry
+	cpi_core -> cloudstack
+	cpi_core -> template_webdav_server
+  }
+)
+
+* detailed diagram sequence
+
+![Alt text](http://plantuml.com:80/plantuml/png/ZLJ1Rjim33rFNq5arsGVq203jhGOYdReq6Mx1hB4s6fiIP1a9_txKNAon8hJzcZoaNnyV79XzZ2vlN--MwwUdYVia-KkAA4irm6aSYY2SGorXCBiMH71or_t4_ZygCegVAzR79O8gou2Qs4SCe3pS65yjNPOAX_SQvRROI5vbmrzVFfp-tlrRVcGSHIrQQKFN6o7ySwPDc16_U_FwyoxPlYT6F8ITVZVWoqMu0Cs0kiQ5Wjsr0TcN-EUS0F28G-uFe9OZFR99C8ueayHh5-SGBYtnYCGnjQ47e1E2nEmLn3T6VIKFkzOXM3Xnztg0prtN0NOc5DFciBbQzg-QqW84-XetBwfGDVCHvPtw9CZCjGuZnuJHtBIl_NePf87FgmO-8YADeWo1U4Od6UI78n1s59rcFh2eUyGrn34EjCfhuo6I9MBeBgU4wFqSNmo2O5xSNfjb0PP2Jiblv2dV0BE4d3Epeg6V32Sw4oprRYKf9xFg_FzgOS_Ev7I6pC5PQayLYSbfVBRYpvfMxgbqHjLjgIjnh0pRXlvqvEW5gCLZMdfAtPDJuTqGbjXWuxNQSuykSQYyz6cwPVYjsyQ9m9ovrmaHmnpyekfsmRp0JV00y6gA_spv5LxjLR66McBce9NoVGDnyWCBACvdKkOfY49fmFz4vLtRtqW9C5Z24gNNrwyqHyuL3fLTXR6_W40)
+
+<!-- source of the diag
+  @startuml
+  box "DIRECTOR"
+	participant director
+  end box
+  box "CPI" #LightBlue
+	participant cpi
+	participant cpi_core
+    participant bosh_registry
+    participant webdav
+  end box
+  box "CLOUDSTACK"
+	participant cloudstack
+	participant vrouter
+  end box
+  box "VM" #LightBlue
+	participant vm
+	participant bosh_agent
+  end box
+  
+== stemcell ==
+  director -> cpi : create_stemcell
+  cpi -> cpi_core : create_stemcell
+  cpi_core -> webdav : expose template
+  cpi_core -> cloudstack : register template
+  cloudstack -> webdav : http GET template
+  cpi_core -> cloudstack : wait for template ready
+  
+== vm bootstrap ==
+  director -> cpi : create_vm;
+  cpi -> cpi_core : rest cpi create_vm;
+  cpi_core -> cloudstack : create vm and user-data;
+  cpi_core -> bosh_registry : feed bosh registry;
+  cloudstack -> vrouter : give user data;
+  cloudstack -> vm : provision vm;
+  activate vm
+  vm -> bosh_agent : vm boostrap in dhcp, starts bosh-agent;
+  bosh_agent -> vrouter : get user data, bosh_registry address;
+  bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
+  bosh_agent -> vm : reconfigure network static ip;
+  bosh_agent -> vm : mount and partion ephemeral disk;
+
+== persistent disk ==
+  director -> cpi : create_disk
+  cpi -> cpi_core: create_disk
+  cpi_core -> cloudstack: create volume
+  director -> cpi: attach_disk
+  cpi -> cpi_core: attach_disk
+  cpi_core -> bosh_registry : update disk list
+  cpi_core -> cloudstack: attach volume
+  director -> bosh_agent : nats command, reconfigure disk
+  bosh_agent -> bosh_registry : get updated setting.json
+  bosh_agent -> vm : mount and partition persistent disk
+
+
+  @enduml
+-->
+		
+
+
+
 * Out of Scope : security groups provisioning / CS Basic Zones
+
 
 ## Current Status:
 
@@ -29,9 +107,6 @@ This is work in progress / feedbacks welcome (use issues).
 	
 ### Issues
 * local storage issues (persistent disks happen to not be on the same host as vm when reconfiguring a deployment)
-* ip conflicts when recreating vm, due to cloudstack expunge delay (orig vm is destroyed but ip not yet releases)
-* disk / mount issues (probably related to vm expunge delay)
-* stemcell agent.json user data url is hardcoded. must find a way to find the correct cloudstack userdata url on the fly
 * stemcell : cant get keys from cloudstack metadata (requires stemcell code change to match cloudstack)
 * no support for vip / floating ip yet	
 
@@ -40,15 +115,6 @@ This is work in progress / feedbacks welcome (use issues).
 
 * run Director BATS against the cpi
 	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
-
-* expunge vm
-	required with static ip vms (ip not freed until vm is expunged)
-	default value expunge.delay = 300 (5 mins)
-	option 1
-		reduce to 30s as cloudstack admin => need to restart management server 
-		wait 30s in CPI after vm delete
-	option2
-		expunge with cloudstack API. option not avail in jclouds 1.9, use escaping mechanism to add the expunge flag?
 * check template publication
 	from cpi-core webdav, only public template possible ?
 	validate publication state (instant OK for registering, need to wait for the ssvm (secondary storage vm) to copy the template
@@ -65,20 +131,11 @@ This is work in progress / feedbacks welcome (use issues).
 	now hsqldb
 	set persistent file in /var/vcap/store/cpi
 	TBC : use bosh postgres db (add postgres jdbc driver + dialect config + bosh *db credentials injection)
-
-
-* globals
-	harden Exception mangement
-	map spring boot /error to an intelligible CPI rest payload / stdout
-	update json reference files for unit tests
-
-	
-
 * provision ssh keys
-	generate keypair with cloudstack API (no support on portail)
-	use keypair name + private key in bosh.yml
-	see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
-	see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
+** generate keypair with cloudstack API (no support on portail)
+** use keypair name + private key in bosh.yml
+** see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
+** see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
 
 
 
