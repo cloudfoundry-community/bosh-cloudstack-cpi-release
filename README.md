@@ -27,6 +27,52 @@ This is work in progress / feedbacks welcome (use issues).
   }
 )
 
+
+<img src='http://g.gravizo.com/g?
+@startuml;
+		box "DIRECTOR";
+			participant director;
+		end box;
+		
+		
+		box "CPI" #LightBlue;
+			participant cpi;
+			participant cpi_core;
+	       participant bosh_registry;
+		end box;
+		
+		
+		box "CLOUDSTACK";
+			participant cloudstack;
+			participant vrouter;
+		end box;
+		
+		
+		
+		box "VM" #LightBlue;
+			participant vm;
+			participant bosh_agent;
+		end box;
+		
+		
+		director -> cpi : create_vm;
+		cpi -> cpi_core : rest cpi create_vm;
+		cpi_core -> cloudstack : create vm and user-data;
+		cpi_core -> bosh_registry : feed bosh registry;
+		cloudstack -> vrouter : give user data;
+		cloudstack -> vm : provision vm;
+		activate vm
+		vm -> bosh_agent : vm boostrap in dhcp, starts bosh-agent;
+		bosh_agent -> vrouter : get user data, bosh_registry address;
+		bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
+		bosh_agent -> vm : reconfigure network static ip;
+		bosh_agent -> vm : mount and partion ephemeral disk;
+@enduml
+'>
+		
+
+
+
 * Out of Scope : security groups provisioning / CS Basic Zones
 
 
@@ -42,9 +88,6 @@ This is work in progress / feedbacks welcome (use issues).
 	
 ### Issues
 * local storage issues (persistent disks happen to not be on the same host as vm when reconfiguring a deployment)
-* ip conflicts when recreating vm, due to cloudstack expunge delay (orig vm is destroyed but ip not yet releases)
-* disk / mount issues (probably related to vm expunge delay)
-* stemcell agent.json user data url is hardcoded. must find a way to find the correct cloudstack userdata url on the fly
 * stemcell : cant get keys from cloudstack metadata (requires stemcell code change to match cloudstack)
 * no support for vip / floating ip yet	
 
@@ -53,15 +96,6 @@ This is work in progress / feedbacks welcome (use issues).
 
 * run Director BATS against the cpi
 	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
-
-* expunge vm
-	required with static ip vms (ip not freed until vm is expunged)
-	default value expunge.delay = 300 (5 mins)
-	option 1
-		reduce to 30s as cloudstack admin => need to restart management server 
-		wait 30s in CPI after vm delete
-	option2
-		expunge with cloudstack API. option not avail in jclouds 1.9, use escaping mechanism to add the expunge flag?
 * check template publication
 	from cpi-core webdav, only public template possible ?
 	validate publication state (instant OK for registering, need to wait for the ssvm (secondary storage vm) to copy the template
@@ -78,20 +112,11 @@ This is work in progress / feedbacks welcome (use issues).
 	now hsqldb
 	set persistent file in /var/vcap/store/cpi
 	TBC : use bosh postgres db (add postgres jdbc driver + dialect config + bosh *db credentials injection)
-
-
-* globals
-	harden Exception mangement
-	map spring boot /error to an intelligible CPI rest payload / stdout
-	update json reference files for unit tests
-
-	
-
 * provision ssh keys
-	generate keypair with cloudstack API (no support on portail)
-	use keypair name + private key in bosh.yml
-	see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
-	see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
+** generate keypair with cloudstack API (no support on portail)
+** use keypair name + private key in bosh.yml
+** see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
+** see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
 
 
 
