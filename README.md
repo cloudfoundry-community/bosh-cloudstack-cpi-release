@@ -5,6 +5,7 @@
 # bosh-cloudstack-cpi-release
 
 This is work in progress / feedbacks welcome (use issues).
+A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrelease.s3.amazonaws.com/boshrelease-bosh-cloudstack-cpi-release-2%2Bdev.1.tgz)
 
 
 ## Design :
