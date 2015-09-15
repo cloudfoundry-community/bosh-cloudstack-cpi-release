@@ -30,45 +30,36 @@ This is work in progress / feedbacks welcome (use issues).
 * detailed diagram sequence
 
 ![Alt text](http://g.gravizo.com/g?
-	@startuml;
-	box "DIRECTOR";
-		participant director;
-	end box;
-	
-	
-	box "CPI" #LightBlue;
-		participant cpi;
-		participant cpi_core;
-	   participant bosh_registry;
-	end box;
-	
-	
-	box "CLOUDSTACK";
-		participant cloudstack;
-		participant vrouter;
-	end box;
-	
-	
-	
-	box "VM" #LightBlue;
-		participant vm;
-		participant bosh_agent;
-	end box;
-	
-	
-	director -> cpi : create_vm;
-	cpi -> cpi_core : rest cpi create_vm;
-	cpi_core -> cloudstack : create vm and user-data;
-	cpi_core -> bosh_registry : feed bosh registry;
-	cloudstack -> vrouter : give user data;
-	cloudstack -> vm : provision vm;
-	activate vm
-	vm -> bosh_agent : vm boostrap in dhcp, starts bosh-agent;
-	bosh_agent -> vrouter : get user data, bosh_registry address;
-	bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
-	bosh_agent -> vm : reconfigure network static ip;
-	bosh_agent -> vm : mount and partion ephemeral disk;
-	@enduml;
+  @startuml;
+  box "DIRECTOR";
+	participant director;
+  end box;
+  box "CPI" #LightBlue;
+	participant cpi;
+	participant cpi_core;
+   participant bosh_registry;
+  end box;
+  box "CLOUDSTACK";
+	participant cloudstack;
+	participant vrouter;
+  end box;
+  box "VM" #LightBlue;
+	participant vm;
+	participant bosh_agent;
+  end box;
+  director -> cpi : create_vm;
+  cpi -> cpi_core : rest cpi create_vm;
+  cpi_core -> cloudstack : create vm and user-data;
+  cpi_core -> bosh_registry : feed bosh registry;
+  cloudstack -> vrouter : give user data;
+  cloudstack -> vm : provision vm;
+  activate vm
+  vm -> bosh_agent : vm boostrap in dhcp, starts bosh-agent;
+  bosh_agent -> vrouter : get user data, bosh_registry address;
+  bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
+  bosh_agent -> vm : reconfigure network static ip;
+  bosh_agent -> vm : mount and partion ephemeral disk;
+  @enduml
 )
 		
 
