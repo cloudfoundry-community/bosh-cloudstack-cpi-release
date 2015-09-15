@@ -27,8 +27,9 @@ This is work in progress / feedbacks welcome (use issues).
   }
 )
 
+* detailed diagram sequence
 
-<img src='http://g.gravizo.com/g?
+![Alt text](http://g.gravizo.com/g?
 @startuml;
 box "DIRECTOR";
 	participant director;
@@ -68,7 +69,7 @@ bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
 bosh_agent -> vm : reconfigure network static ip;
 bosh_agent -> vm : mount and partion ephemeral disk;
 @enduml;
-'>
+)
 		
 
 
