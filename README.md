@@ -17,6 +17,19 @@ This is work in progress / feedbacks welcome (use issues).
 
 * Out of Scope : security groups provisioning / CS Basic Zones
 
+
+![Alt text](http://g.gravizo.com/g?
+  digraph G {
+    aize ="4,4";
+	cpi -> cpi-core
+	cpi-core -> cpi-bosh-registry
+	cpi-core -> cloudstack
+  }
+)
+
+
+
+
 ## Current Status:
 
 
