@@ -7,3 +7,7 @@ java8/openjdk-1.8.0_40.tar.gz:
   object_id: 5e749451-58ff-418c-b7a0-2646b66d06d8
   sha: 590be5c6337753b28acc81d4843e98e6245b5261
   size: 39630740
+openjdk/jdk-8u72-ea-bin-b02-linux-x64-13_oct_2015.tar.gz:
+  object_id: a179a758-077e-40d3-b2bd-4468f22e34b0
+  sha: dc75d18b76b6a7666d738f503dc44fae8483e37f
+  size: 126378270
