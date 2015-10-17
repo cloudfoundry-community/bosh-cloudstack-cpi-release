@@ -8,7 +8,7 @@ templates:
   
 packages:
 - cpi-common
-- cpi-java
+- openjdk
 - cpi-core
 
 properties:
