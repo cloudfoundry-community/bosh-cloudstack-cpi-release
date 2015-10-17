@@ -103,14 +103,8 @@ A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrel
 ### Global status
 * micro-bosh creation (with an externally launched cpi-core process)
 * compilation vms ok, blobstore ok
-* bosh-master creation from micro-bosh
-* concourse creation from bosh-master
-	
-### Issues
-* local storage issues (persistent disks happen to not be on the same host as vm when reconfiguring a deployment)
-* stemcell : cant get keys from cloudstack metadata (requires stemcell code change to match cloudstack)
-* no support for vip / floating ip yet	
-
+* cpi able to manage most director operation on cloudstack advanced deployment
+* see issues for limitations
 
 ## TODO
 
@@ -129,16 +123,13 @@ A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrel
 	static API assigned through API deployVirtualMachine	
 
 * persist bosh registry.
-	now hsqldb
-	set persistent file in /var/vcap/store/cpi
+	now hsqldb, persistent file in /var/vcap/store/cpi
 	TBC : use bosh postgres db (add postgres jdbc driver + dialect config + bosh *db credentials injection)
 * provision ssh keys
 ** generate keypair with cloudstack API (no support on portail)
 ** use keypair name + private key in bosh.yml
 ** see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
 ** see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
-
-
 
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
