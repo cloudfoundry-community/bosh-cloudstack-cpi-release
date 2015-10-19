@@ -6,7 +6,7 @@ install:
 - gem install bosh_cli bosh_cli_plugin_micro --no-ri --no-rdoc
 rvm:
 - ruby-2.1.2
-script: 'bosh create release --force --name bosh-cloudstack-cpi --version 0+dev.1 --with-tarball '
+script: 'bosh create release --force --with-tarball '
 #deploy:
 #  provider: releases
 #  api_key:
