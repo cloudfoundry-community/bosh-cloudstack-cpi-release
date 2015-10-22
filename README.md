@@ -32,63 +32,7 @@ A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrel
 
 ![Alt text](http://plantuml.com:80/plantuml/png/ZLJ1Rjim33rFNq5arsGVq203jhGOYdReq6Mx1hB4s6fiIP1a9_txKNAon8hJzcZoaNnyV79XzZ2vlN--MwwUdYVia-KkAA4irm6aSYY2SGorXCBiMH71or_t4_ZygCegVAzR79O8gou2Qs4SCe3pS65yjNPOAX_SQvRROI5vbmrzVFfp-tlrRVcGSHIrQQKFN6o7ySwPDc16_U_FwyoxPlYT6F8ITVZVWoqMu0Cs0kiQ5Wjsr0TcN-EUS0F28G-uFe9OZFR99C8ueayHh5-SGBYtnYCGnjQ47e1E2nEmLn3T6VIKFkzOXM3Xnztg0prtN0NOc5DFciBbQzg-QqW84-XetBwfGDVCHvPtw9CZCjGuZnuJHtBIl_NePf87FgmO-8YADeWo1U4Od6UI78n1s59rcFh2eUyGrn34EjCfhuo6I9MBeBgU4wFqSNmo2O5xSNfjb0PP2Jiblv2dV0BE4d3Epeg6V32Sw4oprRYKf9xFg_FzgOS_Ev7I6pC5PQayLYSbfVBRYpvfMxgbqHjLjgIjnh0pRXlvqvEW5gCLZMdfAtPDJuTqGbjXWuxNQSuykSQYyz6cwPVYjsyQ9m9ovrmaHmnpyekfsmRp0JV00y6gA_spv5LxjLR66McBce9NoVGDnyWCBACvdKkOfY49fmFz4vLtRtqW9C5Z24gNNrwyqHyuL3fLTXR6_W40)
 
-<!-- source of the diag
-  @startuml
-  box "DIRECTOR"
-	participant director
-  end box
-  box "CPI" #LightBlue
-	participant cpi
-	participant cpi_core
-    participant bosh_registry
-    participant webdav
-  end box
-  box "CLOUDSTACK"
-	participant cloudstack
-	participant vrouter
-  end box
-  box "VM" #LightBlue
-	participant vm
-	participant bosh_agent
-  end box
-  
-== stemcell ==
-  director -> cpi : create_stemcell
-  cpi -> cpi_core : create_stemcell
-  cpi_core -> webdav : expose template
-  cpi_core -> cloudstack : register template
-  cloudstack -> webdav : http GET template
-  cpi_core -> cloudstack : wait for template ready
-  
-== vm bootstrap ==
-  director -> cpi : create_vm;
-  cpi -> cpi_core : rest cpi create_vm;
-  cpi_core -> cloudstack : create vm and user-data;
-  cpi_core -> bosh_registry : feed bosh registry;
-  cloudstack -> vrouter : give user data;
-  cloudstack -> vm : provision vm;
-  activate vm
-  vm -> bosh_agent : vm boostrap in dhcp, starts bosh-agent;
-  bosh_agent -> vrouter : get user data, bosh_registry address;
-  bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
-  bosh_agent -> vm : reconfigure network static ip;
-  bosh_agent -> vm : mount and partion ephemeral disk;
-
-== persistent disk ==
-  director -> cpi : create_disk
-  cpi -> cpi_core: create_disk
-  cpi_core -> cloudstack: create volume
-  director -> cpi: attach_disk
-  cpi -> cpi_core: attach_disk
-  cpi_core -> bosh_registry : update disk list
-  cpi_core -> cloudstack: attach volume
-  director -> bosh_agent : nats command, reconfigure disk
-  bosh_agent -> bosh_registry : get updated setting.json
-  bosh_agent -> vm : mount and partition persistent disk
-
-
-  @enduml
--->
+<!-- source of the diag into sequence.txt -->
 		
 
 
