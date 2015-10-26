@@ -1,0 +1,51 @@
+ @startuml
+  box "DIRECTOR"
+	participant director
+  end box
+  box "CPI" #LightBlue
+	participant cpi
+    participant bosh_registry
+    participant webdav
+  end box
+  box "CLOUDSTACK"
+	participant cloudstack_api
+	participant vrouter
+  end box
+  box "VM" #LightBlue
+	participant vm
+	participant bosh_agent
+  end box
+
+== stemcell ==
+  director -> cpi : create_stemcell
+  cpi -> webdav : expose template
+  cpi -> cloudstack_api : register template
+  cloudstack_api -> webdav : http GET template
+  cpi -> cloudstack_api : wait for template ready
+
+== vm bootstrap ==
+  director -> cpi : create_vm;
+  cpi -> cloudstack_api : create vm and user-data;
+  cpi -> bosh_registry : feed bosh registry;
+  cloudstack_api -> vrouter : set user data\nin metadata\n service;
+  cloudstack_api -> vm : provision vm;
+  activate vm
+  vm -> bosh_agent : vm boostraps in dhcp,\nbosh-agent starts \n (reading agent.json);
+  bosh_agent -> vrouter : query meta-data server:\nget bosh_registry address from user data;
+  bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
+  bosh_agent -> vm : reconfigure network static ip;
+  bosh_agent -> vm : mount and partition ephemeral disk;
+
+== persistent disk ==
+  director -> cpi : create_disk
+  cpi -> cloudstack_api: create volume
+  director -> cpi: attach_disk
+  cpi -> cpi: attach_disk
+  cpi -> bosh_registry : update disk list
+  cpi -> cloudstack_api: attach volume
+  director -> bosh_agent : nats command, reconfigure disk
+  bosh_agent -> bosh_registry : get updated setting.json
+  bosh_agent -> vm : mount and partition persistent disk
+
+
+  @enduml

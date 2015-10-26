@@ -1,0 +1,34 @@
+ @startuml
+  box "DIRECTOR"
+	participant director
+  end box
+  box "CPI" #LightBlue
+	participant cpi
+    participant bosh_registry
+  end box
+  box "CLOUDSTACK"
+	participant cloudstack_api
+	participant vrouter
+  end box
+  box "VM" #LightBlue
+	participant vm
+	participant bosh_agent
+  end box
+
+
+
+  director -> cpi : create_vm;
+  cpi -> cloudstack_api : create vm \nand set user-data;
+  cpi -> bosh_registry : feed bosh registry: \n(networking, root+eph disks, \nbosh nats, blobstore
+  cloudstack_api -> vrouter : set user data\nin metadata\n service;
+  cloudstack_api -> vm : provision vm;
+  activate vm
+  vm -> bosh_agent : vm boostraps in dhcp,\nbosh-agent starts \n (reading agent.json);
+  bosh_agent -> vrouter : query meta-data server:\nget bosh_registry address from user data;
+  bosh_agent -> bosh_registry : gets bootstrap info, ip adress and disks;
+  bosh_agent -> vm : reconfigure network static ip;
+  bosh_agent -> vm : mount and partition ephemeral disk;
+
+
+hide footbox
+  @enduml
