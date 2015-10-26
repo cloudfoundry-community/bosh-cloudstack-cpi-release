@@ -4,8 +4,8 @@
 
 # bosh-cloudstack-cpi-release
 
-This is work in progress / feedbacks welcome (use issues).
-A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrelease.s3.amazonaws.com/boshrelease-bosh-cloudstack-cpi-release-2%2Bdev.1.tgz)
+This is work in progress / feedbacks welcome (use issues). Tested on cloudstack 4.3, xen 6.2
+The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release) 
 
 
 ## Design :
@@ -36,8 +36,8 @@ A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrel
 		
 
 
+* Out of Scope : security groups provisioning / CS Basic Zones, see issues for current limitations
 
-* Out of Scope : security groups provisioning / CS Basic Zones
 
 
 ## Current Status:
@@ -82,7 +82,7 @@ A quick stable v2 dev release is [available](https://bosh-cloudstack-cpi-boshrel
 
 # add the cpi bosh release
 releases:
-- {name: bosh, version: "185"}
+- {name: bosh, version: "215"}
 - {name:  bosh-cloudstack-cpi, version: latest}
 
 # add the template for cpi-core rest server
@@ -153,7 +153,7 @@ disk_pools:
 resource_pools:
 - name: vms
   stemcell:
-    name: bosh-cloudstack-xeb-ubuntu-trusty-go_agent-raw
+    name: bosh-cloudstack-xen-ubuntu-trusty-go_agent-raw
     version: latest
   network: private
   size: 1
