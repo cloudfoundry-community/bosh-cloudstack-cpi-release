@@ -58,8 +58,7 @@ The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/
 	from cpi-core webdav, only public template possible ?
 	validate publication state (instant OK for registering, need to wait for the ssvm (secondary storage vm) to copy the template
 	connectivity issue when cloudstack tries asynchronously to copy template : vlan opened, dedicated chunk encoding compatible spring boot endpoint
-	(workaround: mock template mode in cpi. copies an existing template and use it as a stemcell image)
-	
+
 	add a garbarge collection mechanism to the webdav server (remove old templates when consumed by cloudstack)	
 
 * use isolated / dedicated networks for bosh vms [avanced-network](http://www.shapeblue.com/using-the-api-for-advanced-network-management)
@@ -122,8 +121,6 @@ properties:
       
 	  cpi:
         webdav_host: *bosh_static_ip
-        mock_create_stemcell: true
-        existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
         default_disk_offering: "DO1 - Small STD" 
         default_ephemeral_disk_offering: "DO1 - Small STD"
         vm_expunge_delay: 40 # <-- set to 40s. default is 30s after vm delete.  
@@ -189,8 +186,182 @@ As the bosh-init bootstrapping is quite cumbersome, its recommended to provision
 ```yml
 
 
----
+---                                                                                                          
+name: micro-bosh                                                                                                   
+releases:
 
+- name: bosh
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=215
+  sha1: f86d4cec1baff641287e069619d7ed4dfa578b13
+
+- name: bosh-cloudstack-cpi-release
+  url:  http://localhost:8080/webdav/bosh-cloudstack-cpi-release-5+dev.2.tgz
+  sha1: 9f187f69849cf38f72cb389dee96504f57e03f9a
+
+resource_pools:
+- name: vms    
+  network: private
+  stemcell:
+    url:  http://localhost:8080/webdav/light-bosh-stemcell-3033-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    sha1: cf6f6925d133d0b579d154694025c027bc64ef88
+
+  cloud_properties:                                                                                              
+    compute_offering: "CO2 - Medium STD" # <--- Replace with compute offering name                                                                          
+    disk: 20_000                                                                                                 
+    ephemeral_disk_offering: custom_size_disk_offering2                                                          
+
+disk_pools:
+- name: disks
+  disk_size: 10000 
+  cloud_properties:
+    disk_offering: "DO2n - 10 GiB" # <--- Replace with persistent disk offering name
+    #disk_offering: "custom_size_disk_offering2" # <--- Replace with persistent disk offering name
+
+networks:
+- name: private
+  type: manual 
+  subnets:     
+  - range: 10.0.0.128/26
+    gateway: 10.0.0.129 
+    dns: [10.234.50.180,10.234.71.124]
+    cloud_properties: {name: "3112 - preprod - back"} # <--- Replace with Network name
+
+jobs:
+- name: bosh
+  instances: 1
+
+  templates:
+  - {name: nats, release: bosh}
+  - {name: redis, release: bosh}
+  - {name: postgres, release: bosh}
+  - {name: blobstore, release: bosh}
+  - {name: director, release: bosh} 
+  - {name: health_monitor, release: bosh}
+  - {name: powerdns, release: bosh}      
+  - {name: cpi, release: bosh-cloudstack-cpi-release}
+
+  resource_pool: vms
+  persistent_disk_pool: disks
+
+  networks:
+  - {name: private, static_ips: [ &micro_bosh_static_ip <micro_bosh_ip>]}
+# ip range in cloudstack 150 to 160              
+
+  properties:
+    nats:    
+      address: 127.0.0.1
+      user: nats        
+      password: nats-password
+
+    redis:
+      listen_addresss: 127.0.0.1
+      address: 127.0.0.1        
+      password: redis-password  
+
+    postgres: &db
+      host: 127.0.0.1
+      user: postgres 
+      password: postgres-password
+      database: bosh             
+      adapter: postgres          
+
+    blobstore:
+      address: *micro_bosh_static_ip
+      port: 25250            
+      provider: dav          
+      director: {user: director, password: director-password}
+      agent: {user: agent, password: agent-password}         
+
+    director:
+      address: 127.0.0.1
+      name: micro-bosh     
+      db: *db           
+      cpi_job: cpi      
+      #max_threads: 4    
+      enable_snapshots: false 
+
+    hm:
+      http: {user: hm, password: hm-password}
+      director_account: {user: admin, password: admin}
+      resurrector_enabled: true                       
+                                                      
+    dns:                                              
+      address: *micro_bosh_static_ip                           
+      #the bosh powerDNS will contact the following DNS server for serving DNS entries from other domains                                                                                                                         
+      # i.e. elpaaso-dns.internal-qa.paas                                                                                                                                                                                         
+      recursor: 10.234.50.180
+      db: *db
+
+    cloudstack:  &cloudstack # <--- Replace values below
+      endpoint: http://10.x.x.x:8080/client/api
+      api_key: <cloudstack api key>
+      secret_access_key: <cloudstack acces key>
+    
+      default_key_name: xx
+      private_key: zz
+      state_timeout: 600
+      state_timeout_volume: 600
+      stemcell_public_visibility: true
+      default_zone: <cloudstack zone>
+      proxy_host: ""                                                                                             
+      proxy_port: 8080                                                                                           
+      proxy_user: xx                                                                                         
+      proxy_password: ""   
+      
+    cpi:
+      mock_create_stemcell: false
+      existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
+  
+      default_disk_offering: "DO2n - 10 GiB" 
+      default_ephemeral_disk_offering: "DO1 - Small STD"  
+
+    
+      webdav_host: *micro_bosh_static_ip
+      webdav_port: 8080
+      webdav_directory: "/var/vcap/store/cpi/webdav"
+      registry:
+        endpoint: http://<micro_bosh_ip>:8080
+        user: admin
+        password: admin
+      blobstore:
+        address: *micro_bosh_static_ip
+        port: 25250
+        provider: dav
+        agent: {user: agent, password: agent-password}
+      agent: 
+        mbus: "nats://nats:nats-password@<micro_bosh_ip>:4222"     
+      ntp: ""
+
+    agent: {mbus: "nats://nats:nats-password@<micro_bosh_ip>:4222"}
+
+    ntp: &ntp [10.234.50.245 ,10.234.50.246]
+
+cloud_provider:
+  template: {name: cpi, release: bosh-cloudstack-cpi-release}
+
+  mbus: "https://mbus:mbus-password@<micro_bosh_ip>:6868"
+
+  properties:
+    cloudstack: *cloudstack
+    cpi:
+      webdav_host: <inception_vm_ip>
+      webdav_port: 8080
+  
+      default_disk_offering: "DOXn"  # <-- default offering must be shared. custom size
+
+      default_ephemeral_disk_offering: "DO1 - Small STD"  
+
+      registry:
+        endpoint: http://<inception_vm_ip>:8080
+        user: admin
+        password: admin
+      agent:
+        mbus: "https://mbus:mbus-password@0.0.0.0:6868" 
+      ntp: ""
+
+    agent: {mbus: "https://mbus:mbus-password@0.0.0.0:6868"}
+    blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
+    ntp: *ntp
 
 
 ```

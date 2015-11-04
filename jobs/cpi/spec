@@ -81,14 +81,6 @@ properties:
     description:
       webdav filesystem dir. defaults to persistent disk location
     default : /var/vcap/store/cpi/webdav
-  cpi.mock_create_stemcell:
-    description:
-      Should the CPI use a mock predefined stemcell (use full for troubleshooting / dev)
-    default: false
-  cpi.existing_template_name:
-    description:
-      The cloudstack template name the CPI should use, if mock mode is true
-    default: "bosh-stemcell-3033-po4.vhd.bz2"
     
   cpi.default_disk_offering:
     description:
