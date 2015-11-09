@@ -80,7 +80,7 @@ properties:
   cpi.webdav_directory:
     description:
       webdav filesystem dir. defaults to persistent disk location
-    default : /var/vcap/store/cpi/webdav
+    default : /var/vcap/store/cloudstack_cpi/webdav
     
   cpi.default_disk_offering:
     description:
