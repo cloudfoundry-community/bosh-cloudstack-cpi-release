@@ -1,5 +1,5 @@
 ---
-name: cpi
+name: cloudstack_cpi
 templates:
   cpi-core.erb: bin/cpi-core
   cpi.erb: bin/cpi
