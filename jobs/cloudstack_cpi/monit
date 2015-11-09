@@ -1,5 +1,5 @@
 check process cpi-core
-  with pidfile /var/vcap/sys/run/cpi/cpi-core.pid
-  start program "/var/vcap/jobs/cpi/bin/cpi-core start"
-  stop program "/var/vcap/jobs/cpi/bin/cpi-core stop"
+  with pidfile /var/vcap/sys/run/cloudstack_cpi/cpi-core.pid
+  start program "/var/vcap/jobs/cloudstack_cpi/bin/cpi-core start"
+  stop program "/var/vcap/jobs/cloudstack_cpi/bin/cpi-core stop"
   group vcap

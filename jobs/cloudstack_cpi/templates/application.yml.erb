@@ -48,13 +48,13 @@ spring:
   main:
     show-banner: false
   datasource:
-    url:  jdbc:hsqldb:file:/var/vcap/store/cpi/db
+    url:  jdbc:hsqldb:file:/var/vcap/store/cloudstack_cpi/db
   jpa:
     hibernate:
       ddl-auto: none
 
 
-pidfile: /var/vcap/sys/run/cpi/cpi.pid
+pidfile: /var/vcap/sys/run/cloudstack_cpi/cpi.pid
 
 server:
   port: <%= p('cpi.port') %>
