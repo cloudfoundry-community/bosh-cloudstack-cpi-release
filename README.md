@@ -81,7 +81,7 @@ The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/
 
 # add the cpi bosh release
 releases:
-- {name: bosh, version: "215"}
+- {name: bosh, version: "222"}
 - {name:  bosh-cloudstack-cpi, version: latest}
 
 # add the template for cpi-core rest server
@@ -95,13 +95,13 @@ jobs:
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}
-  - {name: cpi, release: bosh-cloudstack-cpi} # <--
+  - {name: cloudstack_cpi, release: bosh-cloudstack-cpi} # <-- add the external CPI
 
 
 # activate external cpi
 properties:
   director:
-    cpi_job: cpi  
+    cpi_job: cloudstack_cpi
 
 # set external cpi credentials
    cloudstack:
@@ -195,7 +195,7 @@ releases:
   sha1: f86d4cec1baff641287e069619d7ed4dfa578b13
 
 - name: bosh-cloudstack-cpi-release
-  url:  http://localhost:8080/webdav/bosh-cloudstack-cpi-release-5+dev.2.tgz
+  url:  http://localhost:8080/webdav/bosh-cloudstack-cpi-release-5+dev.12.tgz
   sha1: 9f187f69849cf38f72cb389dee96504f57e03f9a
 
 resource_pools:
@@ -238,7 +238,7 @@ jobs:
   - {name: director, release: bosh} 
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}      
-  - {name: cpi, release: bosh-cloudstack-cpi-release}
+  - {name: cloudstack_cpi, release: bosh-cloudstack-cpi-release}
 
   resource_pool: vms
   persistent_disk_pool: disks
@@ -276,7 +276,7 @@ jobs:
       address: 127.0.0.1
       name: micro-bosh     
       db: *db           
-      cpi_job: cpi      
+      cpi_job: cloudstack_cpi      
       #max_threads: 4    
       enable_snapshots: false 
 
@@ -309,16 +309,12 @@ jobs:
       proxy_password: ""   
       
     cpi:
-      mock_create_stemcell: false
-      existing_template_name: "bosh-stemcell-3033-po10.vhd.bz2"
-  
       default_disk_offering: "DO2n - 10 GiB" 
       default_ephemeral_disk_offering: "DO1 - Small STD"  
-
     
       webdav_host: *micro_bosh_static_ip
       webdav_port: 8080
-      webdav_directory: "/var/vcap/store/cpi/webdav"
+      webdav_directory: "/var/vcap/store/cloudstack_cpi/webdav"
       registry:
         endpoint: http://<micro_bosh_ip>:8080
         user: admin
@@ -337,7 +333,7 @@ jobs:
     ntp: &ntp [10.234.50.245 ,10.234.50.246]
 
 cloud_provider:
-  template: {name: cpi, release: bosh-cloudstack-cpi-release}
+  template: {name: cloudstack_cpi, release: bosh-cloudstack-cpi-release}
 
   mbus: "https://mbus:mbus-password@<micro_bosh_ip>:6868"
 
