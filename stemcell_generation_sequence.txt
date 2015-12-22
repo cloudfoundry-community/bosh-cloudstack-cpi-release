@@ -1,0 +1,70 @@
+ @startuml
+  box "concourse"
+	participant job
+  end box
+  
+  box "AWS Vagrant" #LightBlue
+	participant stemcell_builder
+	participant chroot
+  end box
+
+  box "S3"
+	participant osimage_bucket
+        participant stemcell_candidate_bucket
+		participant stemcell_bucket        
+  end box
+  
+  box "github"
+	participant bosh_release_repo
+  end box
+
+
+  box "docker_hub"
+	participant bosh_light_docker
+	participant concourse_docker
+  end box
+
+  box "ubuntu_repo"
+	participant ubuntu_iso
+  end box
+
+== vagrant provisionning  ==
+
+job -> stemcell_builder: vagrant up
+activate stemcell_builder
+
+job <-bosh_release_repo: retrieve bosh sources
+job -> stemcell_builder: vagrant provision remote
+
+
+== osimage ==
+
+job -> stemcell_builder: exec iso generation
+
+
+ubuntu_iso -> stemcell_builder : retrieve ubuntu iso
+
+stemcell_builder -> osimage_bucket: publish os image
+activate osimage_bucket
+
+
+== stemcell candidate ==
+
+job -> stemcell_builder: exec stemcell generation
+
+stemcell_builder <- osimage_bucket: retrieve os image
+stemcell_builder -> chroot: install os image
+activate chroot
+stemcell_builder -> chroot: apply stages
+stemcell_builder -> stemcell_candidate_bucket: publish candidate stemcell
+activate stemcell_candidate_bucket
+
+== stemcell promote ==
+stemcell_builder <- stemcell_candidate_bucket: retrieve os image
+stemcell_builder -> stemcell_bucket: publish final stemcell
+activate stemcell_bucket
+
+
+
+
+  @enduml

@@ -363,7 +363,13 @@ cloud_provider:
 ```
 
 
+## cloudstack stemcell
 
+
+
+<!-- source of the diag into stemcell_sequence.txt -->
+
+![Alt text](http://plantuml.com:80/plantuml/png/ZLIxRiCm39ohho3IELEt82xQpjq2j6CWowojLfO4FOBqxqk_Oyj9ayK3xwYx8nd8pHasmcXXelEuOG-Mko25j5m7-3Ov0zG548e1WnRy-dc03ruw0cpWyLsMLNXJ4UTC7x0MgDGnZr8LwEPLKJbZmjIwxtnuMhnllAnvYTH4_23Xkz_gEuBhGXOyZE27QtgQQjy9KdUb35NC5pfouwkZGuNS8tsjkP3Uymf3VTtn2bSrAHqxp2AA8VgXkWmbvb67sBwwwDnNfB-KasLmweO3rfcJzD9eBNK9a6MCqK1X-vnCPpToecLS17cY8DCPjlJzDabZ1mw3atZ2rYruCYJG___Qg90Qr2OWQ_NtKxyj6CyeWAn3YHeT3zI4s5CaQoou4DeXcmwC9JZYpbTl1pRcIf8tuw4jJ34jbhIrC7I4SItlS3EIBYqbslRRHDjeQXItvgWxkXr8xGEdLr8d_LdU8dDhrIyf9PvV1Luzo2d2APC1lB9poJtFOgN5QVQb2NKje1iYxijgyNSnQV-IcgjRkiSjeFjzeQkCjVe3)
 
 
 ## Contributing
