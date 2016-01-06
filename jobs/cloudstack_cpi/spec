@@ -145,6 +145,10 @@ properties:
     description:
       "ntp server list (same as director) eg : [10.234.50.245 ,10.234.50.246]"
 
+  cpi.use_dhcp:
+    description:
+      "should the cpi tell bosh-agent to configure vm network with dhcp. default is false - static configuration"
+    default: false
   cpi.agent.mbus:
     description:
       "director nats url eg : nats://nats:nats-password@10.234.228.157:4222 "  
