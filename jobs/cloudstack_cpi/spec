@@ -24,7 +24,7 @@ properties:
       cloudstack api secret
   cloudstack.default_key_name:
     description:
-      key name for ssh access (unused)
+      key name for ssh access. must be present in cloudstack
   cloudstack.private_key:
     description:
       private key for ssh access (unused)
@@ -38,7 +38,7 @@ properties:
     default: 1200
   cloudstack.stemcell_public_visibility:
     description:
-      must stemcell template be public ?
+      must stemcell template be public ?  (unused)
     default: true
   cloudstack.default_zone:
     description:
