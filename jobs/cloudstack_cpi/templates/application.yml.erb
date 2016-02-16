@@ -23,6 +23,10 @@ cpi:
   default_ephemeral_disk_offering: <%= p('cpi.default_ephemeral_disk_offering') %>
   vm_expunge_delay: <%= p('cpi.vm_expunge_delay') %>
   use_dhcp: <%= p('cpi.use_dhcp') %>
+  lightstemcell:
+    network_name: <%= p('cpi.lightstemcell.network_name') %>
+    instance_type: <%= p('cpi.lightstemcell.instance_type') %>
+  
 
   registry:
     endpoint: <%= p('cpi.registry.endpoint') %>
