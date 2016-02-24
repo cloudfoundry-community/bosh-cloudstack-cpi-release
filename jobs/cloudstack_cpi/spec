@@ -40,6 +40,10 @@ properties:
     description:
       must stemcell template be public ?  (unused)
     default: true
+  cloudstack.stemcell_publish_timeout:
+    description:
+      timeout in minutes before consider stemcell push to cloud is ko
+    default: 5
   cloudstack.default_zone:
     description:
       CloudStack Iaas ZONE to use
