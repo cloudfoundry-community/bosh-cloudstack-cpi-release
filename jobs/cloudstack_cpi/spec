@@ -99,7 +99,10 @@ properties:
       delay (in seconds) the cpi will wait after vm deletion. Should match cloudstack expunge delay to prevent ip reuse conflicts
     default: 30
   
-  
+  cpi.force_expunge:
+    description:
+      explicitly force vm expunge with cloudstack api. Requires cloudstack admin rights
+    default: false
   
   
   cpi.registry.endpoint:
