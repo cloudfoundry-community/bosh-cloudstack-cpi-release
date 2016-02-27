@@ -4,8 +4,9 @@
 
 # bosh-cloudstack-cpi-release
 
-This is work in progress / feedbacks welcome (use issues). Tested on cloudstack 4.3, xen 6.2
+This is now quite a stable CPI. Feedbacks welcome (use issues). Tested on cloudstack 4.5, xen 6.5
 The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release) 
+
 
 
 ## Design :
@@ -45,34 +46,26 @@ The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/
 
 
 ### Global status
+* validated on cloudstack 4.5, xen 6.5 with stemcell 3191
 * micro-bosh creation (with an externally launched cpi-core process)
 * compilation vms ok, blobstore ok
 * cpi able to manage most director operation on cloudstack advanced deployment
-* see issues for limitations
+* use isolated / dedicated networks for bosh vms [avanced-network](http://www.shapeblue.com/using-the-api-for-advanced-network-management)
+* provision ssh keys
+    generate keypair with cloudstack API (no support on portail)
+    use keypair name + private key in bosh.yml
+    see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
+    see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
+
+
 
 ## TODO
-
+* see issues for limitations and planned improvements
 * run Director BATS against the cpi
 	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
 * check template publication
-	from cpi-core webdav, only public template possible ?
-	validate publication state (instant OK for registering, need to wait for the ssvm (secondary storage vm) to copy the template
 	connectivity issue when cloudstack tries asynchronously to copy template : vlan opened, dedicated chunk encoding compatible spring boot endpoint
-
 	add a garbarge collection mechanism to the webdav server (remove old templates when consumed by cloudstack)	
-
-* use isolated / dedicated networks for bosh vms [avanced-network](http://www.shapeblue.com/using-the-api-for-advanced-network-management)
-	/
-	static API assigned through API deployVirtualMachine	
-
-* persist bosh registry.
-	now hsqldb, persistent file in /var/vcap/store/cpi
-	TBC : use bosh postgres db (add postgres jdbc driver + dialect config + bosh *db credentials injection)
-* provision ssh keys
-** generate keypair with cloudstack API (no support on portail)
-** use keypair name + private key in bosh.yml
-** see [cloudstack-keypair](http://cloudstack-administration.readthedocs.org/en/latest/virtual_machines.html?highlight=ssh%20keypair)
-** see [cloudstack-template](http://chriskleban-internet.blogspot.fr/2012/03/build-cloud-cloudstack-instance.html)
 
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
@@ -81,7 +74,7 @@ The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/
 
 # add the cpi bosh release
 releases:
-- {name: bosh, version: "222"}
+- {name: bosh, version: "254"}
 - {name:  bosh-cloudstack-cpi, version: latest}
 
 # add the template for cpi-core rest server
@@ -123,7 +116,8 @@ properties:
         webdav_host: *bosh_static_ip
         default_disk_offering: "DO1 - Small STD" 
         default_ephemeral_disk_offering: "DO1 - Small STD"
-        vm_expunge_delay: 40 # <-- set to 40s. default is 30s after vm delete.  
+        vm_expunge_delay: 40 # <-- set to 40s. default is 30s after vm delete.
+        force_expunge: false  
 	
 	    registry:
 	      endpoint: http://<bosh_ip>:8080
@@ -342,9 +336,7 @@ cloud_provider:
     cpi:
       webdav_host: <inception_vm_ip>
       webdav_port: 8080
-  
       default_disk_offering: "DOXn"  # <-- default offering must be shared. custom size
-
       default_ephemeral_disk_offering: "DO1 - Small STD"  
 
       registry:
