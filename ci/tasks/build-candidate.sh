@@ -7,6 +7,8 @@ source /etc/profile.d/chruby-with-ruby-2.1.2.sh
 
 semver=`cat version-semver/number`
 
+mkdir -p ../bosh-release/
+
 
 cd bosh-cpi-release
 
@@ -30,5 +32,5 @@ echo "building CPI release..."
 bosh create release --name $cpi_release_name --version $semver --with-tarball
 
 
-mkdir -p ../bosh-release/
-mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz ../bosh-release/$cpi_release_name-$semver.tgz
+
+mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz ../bosh-release/
