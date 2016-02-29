@@ -53,7 +53,7 @@ jobs:
     file: bosh-cpi-release/ci/tasks/build-candidate.yml
 
   - put: bosh-cpi-dev-artifacts
-    params: {from: build/out/.*\.tgz}
+    params: {from: bosh-release/.*\.tgz}
 
 - name: lifecycle
   serial: true
