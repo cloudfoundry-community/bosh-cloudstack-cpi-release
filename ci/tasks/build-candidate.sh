@@ -11,14 +11,16 @@ mkdir out
 
 cd bosh-cpi-release
 
-echo "running unit tests"
-pushd src/bosh_cloudstack_cpi
-  bundle install
-  bundle exec rspec spec/unit/*
-popd
+
+# unit tests should be launched on submodule src/bosh-cloudstack-cpi-core, as maven tests
+#echo "running unit tests"
+#pushd src/bosh_cloudstack_cpi
+#  bundle install
+#  bundle exec rspec spec/unit/*
+#popd
 
 echo "installing the latest bosh_cli"
-gem install bosh_cli -v 1.3016.0 --no-ri --no-rdoc
+gem install bosh_cli -v 1.3184.1.0 --no-ri --no-rdoc
 
 echo "using bosh CLI version..."
 bosh version
@@ -28,4 +30,5 @@ cpi_release_name="bosh-cloudstack-cpi"
 echo "building CPI release..."
 bosh create release --name $cpi_release_name --version $semver --with-tarball
 
-mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz ../out/
+mkdir bosh-release
+mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz bosh-release
