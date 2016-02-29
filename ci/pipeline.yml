@@ -455,12 +455,32 @@ resources:
   source:
     repository: cloudfoundry/bosh
 
+
+# waiting for official cloudstack support
+#- name: cloudstack-ubuntu-stemcell
+#  type: bosh-io-stemcell
+#  source:
+#    name: bosh-cloudstack-kvm-ubuntu-trusty-go_agent
+#    
+
 - name: cloudstack-ubuntu-stemcell
-  type: bosh-io-stemcell
+  type: s3
   source:
-    name: bosh-cloudstack-kvm-ubuntu-trusty-go_agent
+    regexp: bosh-stemcell-([0-9.]+)-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    bucket: orange-candidate-cloudstack-xen-stemcell/bosh-stemcell/cloudstack
+    region_name: us-east-1
+    
+    
+# waiting for official cloudstack support
+#- name: cloudstack-centos-stemcell
+#  type: bosh-io-stemcell
+#  source:
+#    name: bosh-cloudstack-kvm-centos-7-go_agent
 
 - name: cloudstack-centos-stemcell
-  type: bosh-io-stemcell
+  type: s3
   source:
-    name: bosh-cloudstack-kvm-centos-7-go_agent
+    regexp: bosh-stemcell-([0-9.]+)-cloudstack-xen-centos-7-go_agent.tgz
+    bucket: orange-candidate-cloudstack-xen-stemcell/bosh-stemcell/cloudstack
+    region_name: us-east-1
+
