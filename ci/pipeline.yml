@@ -466,8 +466,8 @@ resources:
 - name: cloudstack-ubuntu-stemcell
   type: s3
   source:
-    regexp: bosh-stemcell-([0-9.]+)-cloudstack-xen-ubuntu-trusty-go_agent.tgz
-    bucket: orange-candidate-cloudstack-xen-stemcell/bosh-stemcell/cloudstack
+    regexp: bosh-stemcell/cloudstack/bosh-stemcell-([0-9.]+)-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    bucket: orange-candidate-cloudstack-xen-stemcell
     region_name: us-east-1
     
     
@@ -480,7 +480,7 @@ resources:
 - name: cloudstack-centos-stemcell
   type: s3
   source:
-    regexp: bosh-stemcell-([0-9.]+)-cloudstack-xen-centos-7-go_agent.tgz
-    bucket: orange-candidate-cloudstack-xen-stemcell/bosh-stemcell/cloudstack
+    regexp: bosh-stemcell/cloudstackbosh-stemcell-([0-9.]+)-cloudstack-xen-centos-7-go_agent.tgz
+    bucket: orange-candidate-cloudstack-xen-stemcell
     region_name: us-east-1
 
