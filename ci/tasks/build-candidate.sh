@@ -30,5 +30,6 @@ cpi_release_name="bosh-cloudstack-cpi"
 echo "building CPI release..."
 bosh create release --name $cpi_release_name --version $semver --with-tarball
 
-mkdir bosh-release
-mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz bosh-release
+
+mkdir -p bosh-release/
+mv dev_releases/$cpi_release_name/$cpi_release_name-$semver.tgz bosh-release/$cpi_release_name-$semver.tgz
