@@ -1,6 +1,6 @@
 ---
 platform: linux
-image: docker:///boshcpi/openstack-cpi-release
+image: docker:///boshcpi/cloudstack-cpi-release
 inputs:
   - name: bosh-cpi-release       # --- location of task script to run
   - name: bosh-init              # --- bosh-init executable to do deploy
@@ -14,21 +14,21 @@ run:
 params:
   base_os:                       replace-me
   network_type_to_test:          replace-me
-  openstack_flavor:              replace-me
-  openstack_connection_timeout:  replace-me
-  openstack_read_timeout:        replace-me
-  openstack_write_timeout:       replace-me
-  openstack_state_timeout:       replace-me
+  cloudstack_flavor:              replace-me
+  cloudstack_connection_timeout:  replace-me
+  cloudstack_read_timeout:        replace-me
+  cloudstack_write_timeout:       replace-me
+  cloudstack_state_timeout:       replace-me
   private_key_data:              replace-me
   bosh_registry_port:            replace-me
-  openstack_net_id:              replace-me
-  openstack_security_group:      replace-me
-  openstack_default_key_name:    replace-me
-  openstack_auth_url:            replace-me
-  openstack_username:            replace-me
-  openstack_api_key:             replace-me
-  openstack_tenant:              replace-me
-  openstack_floating_ip:         replace-me
-  openstack_manual_ip:           replace-me
-  openstack_net_cidr:            replace-me
-  openstack_net_gateway:         replace-me
+  cloudstack_net_id:              replace-me
+  cloudstack_security_group:      replace-me
+  cloudstack_default_key_name:    replace-me
+  cloudstack_auth_url:            replace-me
+  cloudstack_username:            replace-me
+  cloudstack_api_key:             replace-me
+  cloudstack_tenant:              replace-me
+  cloudstack_floating_ip:         replace-me
+  cloudstack_manual_ip:           replace-me
+  cloudstack_net_cidr:            replace-me
+  cloudstack_net_gateway:         replace-me

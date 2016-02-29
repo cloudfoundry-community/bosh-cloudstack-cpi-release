@@ -5,9 +5,9 @@ set -e -x
 source bosh-cpi-release/ci/tasks/utils.sh
 
 ensure_not_replace_value stemcell_name
-ensure_not_replace_value openstack_security_group
-ensure_not_replace_value openstack_flavor_with_ephemeral_disk
-ensure_not_replace_value openstack_flavor_with_no_ephemeral_disk
+ensure_not_replace_value cloudstack_security_group
+ensure_not_replace_value cloudstack_flavor_with_ephemeral_disk
+ensure_not_replace_value cloudstack_flavor_with_no_ephemeral_disk
 ensure_not_replace_value bosh_director_public_ip
 ensure_not_replace_value bosh_director_private_ip
 ensure_not_replace_value desired_vcap_user_password
@@ -44,7 +44,7 @@ export BAT_VCAP_PRIVATE_KEY="$working_dir/keys/bats.pem"
 export BAT_DIRECTOR=${bosh_director_public_ip}
 export BAT_VCAP_PASSWORD=${desired_vcap_user_password}
 export BAT_DNS_HOST=${bosh_director_public_ip}
-export BAT_INFRASTRUCTURE='openstack'
+export BAT_INFRASTRUCTURE='cloudstack'
 export BAT_NETWORKING='manual'
 
 source /etc/profile.d/chruby.sh
@@ -66,7 +66,7 @@ bosh -n target ${bosh_director_public_ip}
 export BAT_DEPLOYMENT_SPEC="${working_dir}/bats-config.yml"
 cat > $BAT_DEPLOYMENT_SPEC <<EOF
 ---
-cpi: openstack
+cpi: cloudstack
 properties:
   key_name: 
   pool_size: 1
@@ -74,8 +74,8 @@ properties:
   uuid: $(bosh status --uuid)
   vip: ${bats_vm_floating_ip}
   second_static_ip: ${primary_network_second_manual_ip}
-  instance_type: ${openstack_flavor_with_ephemeral_disk}
-  flavor_with_no_ephemeral_disk: ${openstack_flavor_with_no_ephemeral_disk}
+  instance_type: ${cloudstack_flavor_with_ephemeral_disk}
+  flavor_with_no_ephemeral_disk: ${cloudstack_flavor_with_no_ephemeral_disk}
   stemcell:
     name: ${stemcell_name}
     version: latest
@@ -85,7 +85,7 @@ properties:
     type: manual
     cloud_properties:
       net_id: ${primary_network_id}
-      security_groups: [${openstack_security_group}]
+      security_groups: [${cloudstack_security_group}]
     cidr: ${primary_network_cidr}
     reserved: [${bosh_director_private_ip}]
     static: [${primary_network_range}]
@@ -95,7 +95,7 @@ properties:
     type: manual
     cloud_properties:
       net_id: ${secondary_network_id}
-      security_groups: [${openstack_security_group}]
+      security_groups: [${cloudstack_security_group}]
     cidr: ${secondary_network_cidr}
     reserved: []
     static: [${secondary_network_manual_ip}]

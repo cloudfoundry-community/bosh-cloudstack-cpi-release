@@ -9,9 +9,9 @@ run:
   path: bosh-cpi-release/ci/tasks/run-manual-networking-bats.sh
 params:
   stemcell_name:                            replace-me
-  openstack_security_group:                 replace-me
-  openstack_flavor_with_ephemeral_disk:     replace-me
-  openstack_flavor_with_no_ephemeral_disk:  replace-me
+  cloudstack_security_group:                 replace-me
+  cloudstack_flavor_with_ephemeral_disk:     replace-me
+  cloudstack_flavor_with_no_ephemeral_disk:  replace-me
   bosh_director_public_ip:                  replace-me
   bosh_director_private_ip:                 replace-me
   desired_vcap_user_password:               replace-me

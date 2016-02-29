@@ -6,9 +6,9 @@ source bosh-cpi-release/ci/tasks/utils.sh
 
 ensure_not_replace_value stemcell_name
 ensure_not_replace_value private_key_data
-ensure_not_replace_value openstack_bat_security_group
-ensure_not_replace_value openstack_bats_flavor_with_ephemeral_disk
-ensure_not_replace_value openstack_bats_flavor_with_no_ephemeral_disk
+ensure_not_replace_value cloudstack_bat_security_group
+ensure_not_replace_value cloudstack_bats_flavor_with_ephemeral_disk
+ensure_not_replace_value cloudstack_bats_flavor_with_no_ephemeral_disk
 ensure_not_replace_value primary_network_id
 ensure_not_replace_value bosh_director_public_ip
 ensure_not_replace_value desired_vcap_user_password 
@@ -41,7 +41,7 @@ export BAT_STEMCELL="${working_dir}/stemcell/stemcell.tgz"
 export BAT_DIRECTOR=${bosh_director_public_ip}
 export BAT_VCAP_PASSWORD=${desired_vcap_user_password}
 export BAT_DNS_HOST=${bosh_director_public_ip}
-export BAT_INFRASTRUCTURE='openstack'
+export BAT_INFRASTRUCTURE='cloudstack'
 export BAT_NETWORKING='dynamic'
 
 echo "using bosh CLI version..."
@@ -52,15 +52,15 @@ bosh -n target $bosh_director_public_ip
 export BAT_DEPLOYMENT_SPEC="${working_dir}/bats-config.yml"
 cat > $BAT_DEPLOYMENT_SPEC <<EOF
 ---
-cpi: openstack
+cpi: cloudstack
 properties:
   key_name: external-cpi
   uuid: $(bosh status --uuid)
   vip: ${bats_vm_floating_ip}
-  instance_type: ${openstack_flavor_with_ephemeral_disk}
+  instance_type: ${cloudstack_flavor_with_ephemeral_disk}
   pool_size: 1
   instances: 1
-  flavor_with_no_ephemeral_disk: ${openstack_flavor_with_no_ephemeral_disk}
+  flavor_with_no_ephemeral_disk: ${cloudstack_flavor_with_no_ephemeral_disk}
   stemcell:
     name: ${stemcell_name}
     version: latest
@@ -69,7 +69,7 @@ properties:
     type: dynamic
     cloud_properties:
       net_id: ${primary_network_id}
-      security_groups: [${openstack_security_group}]
+      security_groups: [${cloudstack_security_group}]
 EOF
 
 cd bats

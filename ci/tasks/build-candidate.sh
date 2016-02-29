@@ -12,7 +12,7 @@ mkdir out
 cd bosh-cpi-release
 
 echo "running unit tests"
-pushd src/bosh_openstack_cpi
+pushd src/bosh_cloudstack_cpi
   bundle install
   bundle exec rspec spec/unit/*
 popd
@@ -23,7 +23,7 @@ gem install bosh_cli -v 1.3016.0 --no-ri --no-rdoc
 echo "using bosh CLI version..."
 bosh version
 
-cpi_release_name="bosh-openstack-cpi"
+cpi_release_name="bosh-cloudstack-cpi"
 
 echo "building CPI release..."
 bosh create release --name $cpi_release_name --version $semver --with-tarball

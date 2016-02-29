@@ -6,31 +6,31 @@ source bosh-cpi-release/ci/tasks/utils.sh
 
 ensure_not_replace_value base_os
 ensure_not_replace_value network_type_to_test
-ensure_not_replace_value openstack_flavor
-ensure_not_replace_value openstack_connection_timeout
-ensure_not_replace_value openstack_read_timeout
-ensure_not_replace_value openstack_write_timeout
-ensure_not_replace_value openstack_state_timeout
+ensure_not_replace_value cloudstack_flavor
+ensure_not_replace_value cloudstack_connection_timeout
+ensure_not_replace_value cloudstack_read_timeout
+ensure_not_replace_value cloudstack_write_timeout
+ensure_not_replace_value cloudstack_state_timeout
 ensure_not_replace_value private_key_data
 ensure_not_replace_value bosh_registry_port
-ensure_not_replace_value openstack_net_id
-ensure_not_replace_value openstack_security_group
-ensure_not_replace_value openstack_default_key_name
-ensure_not_replace_value openstack_auth_url
-ensure_not_replace_value openstack_username
-ensure_not_replace_value openstack_api_key
-ensure_not_replace_value openstack_tenant
-ensure_not_replace_value openstack_floating_ip
-ensure_not_replace_value openstack_manual_ip
-ensure_not_replace_value openstack_net_cidr
-ensure_not_replace_value openstack_net_gateway
+ensure_not_replace_value cloudstack_net_id
+ensure_not_replace_value cloudstack_security_group
+ensure_not_replace_value cloudstack_default_key_name
+ensure_not_replace_value cloudstack_auth_url
+ensure_not_replace_value cloudstack_username
+ensure_not_replace_value cloudstack_api_key
+ensure_not_replace_value cloudstack_tenant
+ensure_not_replace_value cloudstack_floating_ip
+ensure_not_replace_value cloudstack_manual_ip
+ensure_not_replace_value cloudstack_net_cidr
+ensure_not_replace_value cloudstack_net_gateway
 
 source /etc/profile.d/chruby-with-ruby-2.1.2.sh
 
 export BOSH_INIT_LOG_LEVEL=DEBUG
 
 semver=`cat version-semver/number`
-cpi_release_name="bosh-openstack-cpi"
+cpi_release_name="bosh-cloudstack-cpi"
 working_dir=$PWD
 
 mkdir -p $working_dir/keys
@@ -57,13 +57,13 @@ networks:
 - name: private
   type: manual
   subnets:
-   - range:   ${openstack_net_cidr}
-     gateway: ${openstack_net_gateway}
+   - range:   ${cloudstack_net_cidr}
+     gateway: ${cloudstack_net_gateway}
      dns:     [8.8.8.8]
-     static:  [${openstack_manual_ip}]
+     static:  [${cloudstack_manual_ip}]
      cloud_properties:
-       net_id: ${openstack_net_id}
-       security_groups: [${openstack_security_group}]
+       net_id: ${cloudstack_net_id}
+       security_groups: [${cloudstack_security_group}]
 - name: public
   type: vip
 
@@ -73,7 +73,7 @@ resource_pools:
   stemcell:
     url: file://${working_dir}/stemcell/stemcell.tgz
   cloud_properties:
-    instance_type: $openstack_flavor
+    instance_type: $cloudstack_flavor
 
 disk_pools:
 - name: default
@@ -97,10 +97,10 @@ jobs:
 
   networks:
   - name: private
-    static_ips: [${openstack_manual_ip}]
+    static_ips: [${cloudstack_manual_ip}]
     default: [dns, gateway]
   - name: public
-    static_ips: [${openstack_floating_ip}]
+    static_ips: [${cloudstack_floating_ip}]
 
   properties:
     nats:
@@ -122,18 +122,18 @@ jobs:
 
     # Tells the Director/agents how to contact registry
     registry:
-      address: ${openstack_floating_ip}
-      host: ${openstack_floating_ip}
+      address: ${cloudstack_floating_ip}
+      host: ${cloudstack_floating_ip}
       db: *db
       http: {user: admin, password: admin, port: ${bosh_registry_port}}
       username: admin
       password: admin
       port: ${bosh_registry_port}
-      endpoint: http://admin:admin@${openstack_floating_ip}:${bosh_registry_port}
+      endpoint: http://admin:admin@${cloudstack_floating_ip}:${bosh_registry_port}
 
     # Tells the Director/agents how to contact blobstore
     blobstore:
-      address: ${openstack_floating_ip}
+      address: ${cloudstack_floating_ip}
       port: 25250
       provider: dav
       director: {user: director, password: director-password}
@@ -149,25 +149,25 @@ jobs:
       http: {user: hm, password: hm-password}
       director_account: {user: admin, password: admin}
 
-    openstack: &openstack
-      auth_url: ${openstack_auth_url}
-      username: ${openstack_username}
-      api_key: ${openstack_api_key}
-      tenant: ${openstack_tenant}
+    cloudstack: &cloudstack
+      auth_url: ${cloudstack_auth_url}
+      username: ${cloudstack_username}
+      api_key: ${cloudstack_api_key}
+      tenant: ${cloudstack_tenant}
       region: #leave this blank
       endpoint_type: publicURL
-      default_key_name: ${openstack_default_key_name}
+      default_key_name: ${cloudstack_default_key_name}
       default_security_groups:
-      - ${openstack_security_group}
-      state_timeout: ${openstack_state_timeout}
+      - ${cloudstack_security_group}
+      state_timeout: ${cloudstack_state_timeout}
       wait_resource_poll_interval: 5
       connection_options:
-        connect_timeout: ${openstack_connection_timeout}
-        read_timeout: ${openstack_read_timeout}
-        write_timeout: ${openstack_write_timeout}
+        connect_timeout: ${cloudstack_connection_timeout}
+        read_timeout: ${cloudstack_read_timeout}
+        write_timeout: ${cloudstack_write_timeout}
 
     # Tells agents how to contact nats
-    agent: {mbus: "nats://nats:nats-password@${openstack_floating_ip}:4222"}
+    agent: {mbus: "nats://nats:nats-password@${cloudstack_floating_ip}:4222"}
 
     ntp: &ntp
     - 0.north-america.pool.ntp.org
@@ -178,16 +178,16 @@ cloud_provider:
 
   # Tells bosh-micro how to SSH into deployed VM
   ssh_tunnel:
-    host: ${openstack_floating_ip}
+    host: ${cloudstack_floating_ip}
     port: 22
     user: vcap
     private_key: $working_dir/keys/bats.pem
 
   # Tells bosh-micro how to contact remote agent
-  mbus: https://mbus-user:mbus-password@${openstack_floating_ip}:6868
+  mbus: https://mbus-user:mbus-password@${cloudstack_floating_ip}:6868
 
   properties:
-    openstack: *openstack
+    cloudstack: *cloudstack
 
     # Tells CPI how agent should listen for requests
     agent: {mbus: "https://mbus-user:mbus-password@0.0.0.0:6868"}

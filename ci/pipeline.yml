@@ -373,7 +373,7 @@ resources:
   type: s3
   source:
     regexp: bosh-cloudstack-cpi\.tgz
-    bucket: bosh-cloudstack-cpi-pipeline # OpenStack CPI account
+    bucket: bosh-cloudstack-cpi-pipeline # Cloudstack CPI account
     region_name: us-east-1
     access_key_id:      {{s3_cloudstack_cpi_pipeline_access_key}}
     secret_access_key:  {{s3_cloudstack_cpi_pipeline_secret_key}}
