@@ -417,9 +417,9 @@ resources:
 - name: bosh-cpi-release
   type: git
   source:
-    uri: git@github.com:cloudfoundry-incubator/bosh-cloudstack-cpi-release.git
+    uri: git@github.com:cloudfoundry-community/bosh-cloudstack-cpi-release.git
     branch: master
-    private_key: {{github_deployment_key__bosh-cloudstack-cpi-release}}
+    #private_key: {{github_deployment_key__bosh-cloudstack-cpi-release}}
 
 - name: version-semver
   type: semver
