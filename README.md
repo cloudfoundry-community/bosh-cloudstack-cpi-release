@@ -5,7 +5,8 @@
 # bosh-cloudstack-cpi-release
 
 This is now quite a stable CPI. Feedbacks welcome (use issues). Tested on cloudstack 4.5, xen 6.5
-The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release) 
+The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release)
+The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sched.org/event/1d53a0b4ad41b494234eb86ed80fe295) 
 
 
 
