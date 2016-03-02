@@ -1,0 +1,49 @@
+---
+packages:
+- name: openjdk
+  version: !binary |-
+    ZjAxNWFhMDMwZmJlN2ZhYjA0YjFjMDI5NjE4YzRiZmRlMWYzYzAxYg==
+  fingerprint: !binary |-
+    ZjAxNWFhMDMwZmJlN2ZhYjA0YjFjMDI5NjE4YzRiZmRlMWYzYzAxYg==
+  sha1: 7a84c3d74de2d7737a90586a154f985c39d2acc2
+  dependencies: []
+- name: cpi-common
+  version: !binary |-
+    MDE4NzQ0OTM4YjVhNjkxNTI3YzYyNjk2MzIxMWY0YmE0YjU3NzJiZg==
+  fingerprint: !binary |-
+    MDE4NzQ0OTM4YjVhNjkxNTI3YzYyNjk2MzIxMWY0YmE0YjU3NzJiZg==
+  sha1: 61e68e1eae414d6615724d7250ad84b1ce77c028
+  dependencies: []
+- name: cpi-core
+  version: !binary |-
+    ZTA5NGYyYjg4Y2EzNjIyMDQ4OGZkMzExN2I3NWRlNDAyMDJhOGY4Yw==
+  fingerprint: !binary |-
+    ZTA5NGYyYjg4Y2EzNjIyMDQ4OGZkMzExN2I3NWRlNDAyMDJhOGY4Yw==
+  sha1: !binary |-
+    MmJhNzQxMDI3ZDljODM1ODU1MWRkZDY0NjljN2MyZDE5OTI1ZTk4NA==
+  dependencies: []
+- name: maven
+  version: !binary |-
+    NWViNjFkOThkNjA4NDk2MGY1N2Y0YWEyNmFjOTNjYTE3ZjRhNzAzMQ==
+  fingerprint: !binary |-
+    NWViNjFkOThkNjA4NDk2MGY1N2Y0YWEyNmFjOTNjYTE3ZjRhNzAzMQ==
+  sha1: 86a96b263eeef517c1b498a9479da340d16542ae
+  dependencies: []
+jobs:
+- name: cloudstack_cpi
+  version: !binary |-
+    Y2NiZjU4Nzk4ZDQ3ZWNmYWU0NTlkMWVjMzk1N2MwM2IwNmJhZTM2OQ==
+  fingerprint: !binary |-
+    Y2NiZjU4Nzk4ZDQ3ZWNmYWU0NTlkMWVjMzk1N2MwM2IwNmJhZTM2OQ==
+  sha1: !binary |-
+    MTFhZTE0NWRlYjg2NTY4M2ExMmUxZTZmMjZlNzcyYjBiZDc0ZWYxNg==
+license:
+  version: !binary |-
+    ZTNjYmMyN2VlODUyZmU5ZGExOWI2MTU2MDJmODA3ODAyODdiYWNhNg==
+  fingerprint: !binary |-
+    ZTNjYmMyN2VlODUyZmU5ZGExOWI2MTU2MDJmODA3ODAyODdiYWNhNg==
+  sha1: 855984aa53c3642b6504bd32d91137d3c26dc773
+commit_hash: 42b2cc54
+uncommitted_changes: true
+name: bosh-cloudstack-cpi-release
+version: '9'
