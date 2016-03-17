@@ -64,9 +64,6 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 * see issues for limitations and planned improvements
 * run Director BATS against the cpi
 	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
-* check template publication
-	connectivity issue when cloudstack tries asynchronously to copy template : vlan opened, dedicated chunk encoding compatible spring boot endpoint
-	add a garbarge collection mechanism to the webdav server (remove old templates when consumed by cloudstack)	
 
 
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
@@ -75,7 +72,7 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 
 # add the cpi bosh release
 releases:
-- {name: bosh, version: "254"}
+- {name: bosh, version: "243"}
 - {name:  bosh-cloudstack-cpi, version: latest}
 
 # add the template for cpi-core rest server
@@ -89,6 +86,7 @@ jobs:
   - {name: director, release: bosh}
   - {name: health_monitor, release: bosh}
   - {name: powerdns, release: bosh}
+  # - {name: registry, release: bosh}   #<-- registry. commented, cpi brings it own registry  
   - {name: cloudstack_cpi, release: bosh-cloudstack-cpi} # <-- add the external CPI
 
 
@@ -150,9 +148,9 @@ resource_pools:
   network: private
   size: 1
   cloud_properties:
-    compute_offering: "CO1 - Small STD" #<--- Replace with your compute offering name
+    compute_offering: "m1.small" #<--- Replace with your compute offering name
     disk: 20000
-    ephemeral_disk_offering : "DO2 - Medium STD" #<--- Replace with the disk offering u want for ephemeral disk
+    ephemeral_disk_offering : "Data disk" #<--- Replace with the disk offering u want for ephemeral disk
       
       
 ```
@@ -186,31 +184,30 @@ name: micro-bosh
 releases:
 
 - name: bosh
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=215
-  sha1: f86d4cec1baff641287e069619d7ed4dfa578b13
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=243
+  sha1: 94e2514f59a6ff290ae35de067a966ba779688d7
 
 - name: bosh-cloudstack-cpi-release
-  url:  http://localhost:8080/webdav/bosh-cloudstack-cpi-release-5+dev.12.tgz
-  sha1: 9f187f69849cf38f72cb389dee96504f57e03f9a
+  url: https://bosh.io/d/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release?v=9
+  sha1: 9438a7d28791b68efe5fbcfbb8a3e298e5798912
 
 resource_pools:
 - name: vms    
   network: private
   stemcell:
-    url:  http://localhost:8080/webdav/light-bosh-stemcell-3033-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    url:  https://s3.amazonaws.com/orange-cloudstack-xen-stemcell/bosh-stemcell-3192-cloudstack-xen-ubuntu-trusty-go_agent.tgz
     sha1: cf6f6925d133d0b579d154694025c027bc64ef88
 
   cloud_properties:                                                                                              
-    compute_offering: "CO2 - Medium STD" # <--- Replace with compute offering name                                                                          
+    compute_offering: "m1.small" # <--- Replace with compute offering name                                                                          
     disk: 20_000                                                                                                 
-    ephemeral_disk_offering: custom_size_disk_offering2                                                          
+    ephemeral_disk_offering: "Data disk"                                                          
 
 disk_pools:
 - name: disks
   disk_size: 10000 
   cloud_properties:
-    disk_offering: "DO2n - 10 GiB" # <--- Replace with persistent disk offering name
-    #disk_offering: "custom_size_disk_offering2" # <--- Replace with persistent disk offering name
+    disk_offering: "Data disk" # <--- Replace with persistent disk offering name
 
 networks:
 - name: private
@@ -219,7 +216,7 @@ networks:
   - range: 10.0.0.128/26
     gateway: 10.0.0.129 
     dns: [10.234.50.180,10.234.71.124]
-    cloud_properties: {name: "3112 - preprod - back"} # <--- Replace with Network name
+    cloud_properties: {name: "100mb-net"} # <--- Replace with Network name
 
 jobs:
 - name: bosh
@@ -281,18 +278,14 @@ jobs:
       resurrector_enabled: true                       
                                                       
     dns:                                              
-      address: *micro_bosh_static_ip                           
-      #the bosh powerDNS will contact the following DNS server for serving DNS entries from other domains                                                                                                                         
-      # i.e. elpaaso-dns.internal-qa.paas                                                                                                                                                                                         
-      recursor: 10.234.50.180
+      address: *micro_bosh_static_ipp                                                                                                                                                                      recursor: 10.234.50.180
       db: *db
 
     cloudstack:  &cloudstack # <--- Replace values below
       endpoint: http://10.x.x.x:8080/client/api
       api_key: <cloudstack api key>
       secret_access_key: <cloudstack acces key>
-    
-      default_key_name: xx
+      default_key_name: bosh-keypair  #<-- set ssh keypair name
       private_key: zz
       state_timeout: 600
       state_timeout_volume: 600
@@ -302,11 +295,9 @@ jobs:
       proxy_port: 8080                                                                                           
       proxy_user: xx                                                                                         
       proxy_password: ""   
-      
     cpi:
-      default_disk_offering: "DO2n - 10 GiB" 
-      default_ephemeral_disk_offering: "DO1 - Small STD"  
-    
+      default_disk_offering: "Data disk" 
+      default_ephemeral_disk_offering: "Data disk"  
       webdav_host: *micro_bosh_static_ip
       webdav_port: 8080
       webdav_directory: "/var/vcap/store/cloudstack_cpi/webdav"
@@ -322,9 +313,7 @@ jobs:
       agent: 
         mbus: "nats://nats:nats-password@<micro_bosh_ip>:4222"     
       ntp: ""
-
     agent: {mbus: "nats://nats:nats-password@<micro_bosh_ip>:4222"}
-
     ntp: &ntp [10.234.50.245 ,10.234.50.246]
 
 cloud_provider:
@@ -337,9 +326,8 @@ cloud_provider:
     cpi:
       webdav_host: <inception_vm_ip>
       webdav_port: 8080
-      default_disk_offering: "DOXn"  # <-- default offering must be shared. custom size
-      default_ephemeral_disk_offering: "DO1 - Small STD"  
-
+      default_disk_offering: "Data disk"  # <-- default offering must be shared. custom size
+      default_ephemeral_disk_offering: "Data disk"  
       registry:
         endpoint: http://<inception_vm_ip>:8080
         user: admin
@@ -347,7 +335,6 @@ cloud_provider:
       agent:
         mbus: "https://mbus:mbus-password@0.0.0.0:6868" 
       ntp: ""
-
     agent: {mbus: "https://mbus:mbus-password@0.0.0.0:6868"}
     blobstore: {provider: local, path: /var/vcap/micro_bosh/data/cache}
     ntp: *ntp
