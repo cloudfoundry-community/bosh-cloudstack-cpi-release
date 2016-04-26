@@ -1,5 +1,5 @@
 ---
-openjdk/jdk-8u72-ea-bin-b02-linux-x64-13_oct_2015.tar.gz:
-  object_id: a179a758-077e-40d3-b2bd-4468f22e34b0
-  sha: dc75d18b76b6a7666d738f503dc44fae8483e37f
-  size: 126378270
+openjdk/openjdk.tar.gz:
+  object_id: b81c604a-e8c3-4531-ae27-8b0c5ed23e1c
+  sha: 9fc65908420c92047346e5bcc66fee0aad422c5e
+  size: 126476497
