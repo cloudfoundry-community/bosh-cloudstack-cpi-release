@@ -1,3 +1,6 @@
 [submodule "src/bosh-cloudstack-cpi-core"]
 	path = src/bosh-cloudstack-cpi-core
 	url = https://github.com/cloudfoundry-community/bosh-cloudstack-cpi-core.git
+[submodule "src/java-openjdk-boshrelease"]
+	path = src/java-openjdk-boshrelease
+	url = https://github.com/Orange-OpenSource/java-openjdk-boshrelease
