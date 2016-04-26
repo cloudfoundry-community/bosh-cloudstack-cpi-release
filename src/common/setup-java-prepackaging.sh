@@ -1,5 +1,5 @@
-JAVA_VERSION=jdk1.8.0_72
-JAVA_TAR_BALL=jdk-8u72-ea-bin-b02-linux-x64-13_oct_2015.tar.gz
+JAVA_VERSION=jdk1.8.0_102
+JAVA_TAR_BALL=openjdk.tar.gz
 
 cd ${BUILD_DIR}
 

@@ -2,8 +2,17 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-JAVA_VERSION=jdk1.8.0_72
-JAVA_TAR_BALL=jdk-8u72-ea-bin-b02-linux-x64-13_oct_2015.tar.gz
+# Detect # of CPUs so make jobs can be parallelized
+CPUS=$(grep -c ^processor /proc/cpuinfo)
+
+# Available variables
+# $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
+# $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
+export HOME=/var/vcap
+
+
+JAVA_VERSION=jdk1.8.0_*
+JAVA_TAR_BALL=openjdk.tar.gz
 cd ${BOSH_INSTALL_TARGET}
 
 tar zxvf ${BOSH_COMPILE_TARGET}/openjdk/${JAVA_TAR_BALL}
