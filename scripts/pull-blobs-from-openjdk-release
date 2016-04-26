@@ -1,0 +1,17 @@
+#!/bin/bash -eu
+
+RELEASE_DIR="${RELEASE_DIR:-"$(cd $(dirname $0)/.. && pwd)"}"
+JAVA_RELEASE_DIR="${JAVA_RELEASE_DIR:-"$(cd "${RELEASE_DIR}"/src/java-openjdk-boshrelease && pwd)"}"
+
+pushd "${JAVA_RELEASE_DIR}"
+  bosh sync blobs
+popd
+
+pushd "${RELEASE_DIR}"
+  while read -r src_path; do
+    dest_path="$(echo "${src_path}" | sed "s#${JAVA_RELEASE_DIR}#${RELEASE_DIR}#")"
+    mkdir -p "$(dirname "${dest_path}")"
+    rm -f "${dest_path}"
+    cp -RH "${src_path}" "${dest_path}"
+  done < <(find "${JAVA_RELEASE_DIR}/blobs" -type l)
+popd
