@@ -4,5 +4,4 @@ dependencies:
 files:
 - bosh-cloudstack-cpi-core/**/*
 - openjdk/*
-- maven/*
 - common/setup-java-prepackaging.sh
