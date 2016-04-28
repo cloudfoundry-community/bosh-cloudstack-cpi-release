@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/cloudfoundry-community/bosh-cloudstack-cpi-release.png)](https://travis-ci.org/cloudfoundry-community/bosh-cloudstack-cpi-release)
 
-
+[![Dependency Status](https://www.versioneye.com/user/projects/5721c9effcd19a00415b2a18/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5721c9effcd19a00415b2a18)
 
 # bosh-cloudstack-cpi-release
 
