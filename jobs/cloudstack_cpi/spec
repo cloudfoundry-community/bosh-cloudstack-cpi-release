@@ -43,7 +43,11 @@ properties:
   cloudstack.stemcell_requires_hvm:
     description:
       must stemcell template be published with requires hvm flag
-    default: false
+      
+  cloudstack.stemcell_os_type:
+    description:
+      os type to use when publishing stemcell as cloudstack template.
+    default: "Other PV (64-bit)"
   cloudstack.stemcell_publish_timeout:
     description:
       timeout in minutes before consider stemcell push to cloud is ko
