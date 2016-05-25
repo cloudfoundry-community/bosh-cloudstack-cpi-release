@@ -1,5 +1,3 @@
 #!/bin/sh
 # simple curl to cpi-core, set content types, timeout is 1800 s i.e 30 mins
-
-#curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -m 1800 http://<%= p('cpi.host') %>:<%= p('cpi.port') %>/cpi -d @- | tee /var/vcap/sys/log/cpi/curlout.log
-curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -m 1800 http://<%= p('cpi.host') %>:<%= p('cpi.port') %>/cpi -d @- 
+curl -s -u <%= p('cpi.core.user')%>:<%= p('cpi.core.password') %> -X POST -H "Content-Type: application/json" -H "Accept: application/json" -m 1800 http://<%= p('cpi.host') %>:<%= p('cpi.port') %>/cpi -d @- 

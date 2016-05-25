@@ -22,6 +22,10 @@ cpi:
   webdav_host: <%= p('cpi.webdav_host') %>
   webdav_port: <%= p('cpi.webdav_port') %>
   webdav_directory: <%= p('cpi.webdav_directory') %>
+  core:
+    user: <%= p('cpi.core.user') %>
+    password: <%= p('cpi.core.password') %>
+    
   default_disk_offering: <%= p('cpi.default_disk_offering') %>    
   default_ephemeral_disk_offering: <%= p('cpi.default_ephemeral_disk_offering') %>
   vm_expunge_delay: <%= p('cpi.vm_expunge_delay') %>
@@ -30,7 +34,6 @@ cpi:
   lightstemcell:
     network_name: <%= p('cpi.lightstemcell.network_name') %>
     instance_type: <%= p('cpi.lightstemcell.instance_type') %>
-  
 
   registry:
     endpoint: <%= p('cpi.registry.endpoint') %>

@@ -80,7 +80,16 @@ properties:
   cpi.port:
     description:
       port the cpi core rest server is listening on
-    default : 8080      
+    default : 8080
+  cpi.core.user:
+    description:
+      user for core rest API
+    default : cpi
+  cpi.core.password:
+    description:
+      password for core rest API
+    default: cpi
+          
   cpi.webdav_host:
     description:
       webdav server to offer template to cloudstack api. Should be set to bosh server ip address
