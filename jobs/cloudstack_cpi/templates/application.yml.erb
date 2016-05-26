@@ -64,6 +64,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  sleuth:
+    sampler:
+      percentage: <%= p('cpi.zipkin.sampler-percentage')
+  zipkin:
+    enabled: <%= p('cpi.zipkin.enabled') %>
+    base-url: <%= p('cpi.zipkin.base-url') %> 
+      
 
 
 pidfile: /var/vcap/sys/run/cloudstack_cpi/cpi.pid

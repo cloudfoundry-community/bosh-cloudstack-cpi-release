@@ -186,4 +186,24 @@ properties:
   cpi.lightstemcell.instance_type:
     description:
       "instance type to use when creating new template from existing template for light stemcell"
+
+  cpi.zipkin.enabled:
+    description:
+      "should cpi activate zipkin sleuth http tracing"
+    default: false
+
+  cpi.zipkin.sampler-percentage:
+    description:
+      "zipkin sleuth percentage sampling. 1.0 is all, 0.1 is one tenth"
+    default: 0.1
+
+  cpi.zipkin.base-url:
+    description:
+      "remote zipkin collecter server url"
+    example:  http://xx.xx.xx
+    default: http://127.0.0.1:9441
+       
+      
+      
+      
     
