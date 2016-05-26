@@ -43,6 +43,7 @@ properties:
   cloudstack.stemcell_requires_hvm:
     description:
       must stemcell template be published with requires hvm flag
+    default: false
       
   cloudstack.stemcell_os_type:
     description:
@@ -125,7 +126,7 @@ properties:
   cpi.registry.endpoint:
     description:
       host the bosh registry is listening on. must be the IP of the director to be reached from bosh agents
-    default : http://127.0.0.1:8080
+    example: http://admin:admin@<bosh_director_ip>:8080
   cpi.registry.user:
     description:
       user for bosh registry
