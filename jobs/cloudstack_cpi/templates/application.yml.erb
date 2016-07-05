@@ -70,6 +70,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  cache:
+    ehcache:
+      config: ehcache.xml
   sleuth:
     sampler:
       percentage: <%= p('cpi.zipkin.sampler-percentage') %>
