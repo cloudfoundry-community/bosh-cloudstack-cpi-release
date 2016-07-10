@@ -111,6 +111,13 @@ properties:
   cpi.default_ephemeral_disk_offering:
     description:
       default disk offering to use if not specified (ie not disk_pool, just persistent tag
+
+  cpi.vm_create_delay:
+    description:
+      delay (in seconds) the cpi will wait after vm creation. Expected to be tuned in case of xentools discovery delay
+    default: 10
+
+
   
   cpi.vm_expunge_delay:
     description:
