@@ -24,10 +24,10 @@ properties:
       cloudstack api secret
   cloudstack.default_key_name:
     description:
-      key name for ssh access. must be present in cloudstack
+      key name for ssh access. must be present in cloudstack. cpi+bosh agent will provision the public key for vcap user
   cloudstack.private_key:
     description:
-      private key for ssh access (unused)
+      private key for ssh access. (unused)
   cloudstack.state_timeout:
     description:
       cloudstack api timeout
@@ -106,29 +106,26 @@ properties:
     
   cpi.default_disk_offering:
     description:
-      default disk offering to use if not specified (ie not disk_pool, just persistent tag
+      default disk offering to use if not specified (ie not disk_pool, just persistent tag)
     
   cpi.default_ephemeral_disk_offering:
     description:
-      default disk offering to use if not specified (ie not disk_pool, just persistent tag
+      default disk offering to use if not specified (ie not disk_pool, just persistent tag)
 
   cpi.vm_create_delay:
     description:
-      delay (in seconds) the cpi will wait after vm creation. Expected to be tuned in case of xentools discovery delay
+      delay (in seconds) the cpi will wait after vm creation. To tune e.g. in case of xentools discovery delay
     default: 10
-
-
   
   cpi.vm_expunge_delay:
     description:
-      delay (in seconds) the cpi will wait after vm deletion. Should match cloudstack expunge delay to prevent ip reuse conflicts
+      delay (in seconds) the cpi will wait after vm deletion. Should match cloudstack expunge delay to prevent ip reuse conflicts if force_expunge not set
     default: 30
   
   cpi.force_expunge:
     description:
-      explicitly force vm expunge with cloudstack api. Requires cloudstack admin rights
+      explicitly force vm expunge with cloudstack api. expunge follows delete api calls, should not require cloudstack admin rights
     default: false
-  
   
   cpi.registry.endpoint:
     description:

@@ -4,7 +4,7 @@
 
 # bosh-cloudstack-cpi-release
 
-This is now quite a stable CPI. Feedbacks welcome (use issues). Tested on cloudstack 4.5, xen 6.5
+This is now quite a stable CPI. Feedbacks welcome (use issues).
 The cloudstack cpi is available on [bosh.io](http://bosh.io/releases/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release)
 The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sched.org/event/1d53a0b4ad41b494234eb86ed80fe295) 
 
@@ -12,11 +12,14 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 
 ## Design :
 * this CPI is a Bosh external CPI i.e a dedicated bosh release wich must be deployed alongside a bosh release OR configured with bosh release in a bosh-init yml manifest
-*  CPI business logic is in a dedicated spring boot app, included in bosh-cloudstack-cpi-release, called cpi-core. This java component has a dedicated template / monit service.
+*  CPI business logic is in a dedicated Spring Boot app, included in bosh-cloudstack-cpi-release, called cpi-core. This java component has a dedicated template / monit service.
 * leverages Apache Jclouds support for CloudStack, nice java adapter for Cloudstack API
 * supports Cloudstack advanced zone
 * secondary / ephemeral implemented as cloudstack volume (no ephemeral disk concept in CloudStack).
 * Uses a webdav http server to enable stemcell / template loading by cloudstack (other option was create volume and transform to template, required bosh / bosh-init to be hosted in the target cloud / tenant). This webdav server is started from the spring boot cpi core jvm
+* leverages Spring Cloud Hystrix to control the iaas flow (timeout, limit concurrent access, circuit breaker)
+* leverages Spring Cache / ehcache, for "static" cloudstack inventory api access
+* offers an optional zipkin/spring cloud sleuth http connector
 
 
 ![Alt text](http://g.gravizo.com/g?
@@ -38,7 +41,7 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 		
 
 
-* Out of Scope : security groups provisioning / CS Basic Zones, see issues for current limitations
+* Out of Scope : security groups provisioning / CS Basic Zones, Cloudstack VPC, see issues for current limitations
 
 
 
@@ -47,9 +50,8 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 
 
 ### Global status
-* validated on cloudstack 4.5, xen 6.5 with stemcell 3191
-* micro-bosh creation (with an externally launched cpi-core process)
-* compilation vms ok, blobstore ok
+* validated on cloudstack 4.7, xen 6.5 with stemcell 3262
+* bosh-init / micro-bosh creation (with an externally launched cpi-core process)
 * cpi able to manage most director operation on cloudstack advanced deployment
 * use isolated / dedicated networks for bosh vms [avanced-network](http://www.shapeblue.com/using-the-api-for-advanced-network-management)
 * provision ssh keys
@@ -60,19 +62,13 @@ The cpi has been presented in [CF Summit Berlin 2015](https://cfsummiteu2015.sch
 
 
 
-## TODO
-* see issues for limitations and planned improvements
-* run Director BATS against the cpi
-	https://github.com/cloudfoundry/bosh/blob/master/docs/running_tests.md
-
-
 ## Typical bosh.yml configuration to activate the CloudStack external CPI
 
 ```yml
 
 # add the cpi bosh release
 releases:
-- {name: bosh, version: "243"}
+- {name: bosh, version: latest}
 - {name:  bosh-cloudstack-cpi, version: latest}
 
 # add the template for cpi-core rest server
@@ -80,7 +76,7 @@ jobs:
 - name: bosh_apidata
   templates:
   - {name: nats, release: bosh}
-  - {name: redis, release: bosh}
+  # - {name: redis, release: bosh}  #<-- redis no more required on recent bosh version 256+
   - {name: postgres, release: bosh}
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh}
@@ -116,7 +112,7 @@ properties:
         default_disk_offering: "DO1 - Small STD" 
         default_ephemeral_disk_offering: "DO1 - Small STD"
         vm_expunge_delay: 40 # <-- set to 40s. default is 30s after vm delete.
-        force_expunge: false  
+        force_expunge: true  
 	
 	    registry:
 	      endpoint: http://<bosh_ip>:8080
@@ -128,7 +124,7 @@ properties:
 	        agent: {user: agent, password: agent-password}
 	    agent:
 	      mbus: "nats://nats:nats-password@<bosh_ip>:4222"
-	    ntp: ""
+	    ntp:  [10.1.1.1 ,10.1.1.2]
        
       
       
@@ -143,7 +139,7 @@ disk_pools:
 resource_pools:
 - name: vms
   stemcell:
-    name: bosh-cloudstack-xen-ubuntu-trusty-go_agent-raw
+    name: bosh-cloudstack-xen-ubuntu-trusty-go_agent
     version: latest
   network: private
   size: 1
@@ -184,18 +180,18 @@ name: micro-bosh
 releases:
 
 - name: bosh
-  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=243
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=257.1
   sha1: 94e2514f59a6ff290ae35de067a966ba779688d7
 
 - name: bosh-cloudstack-cpi-release
-  url: https://bosh.io/d/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release?v=9
+  url: https://bosh.io/d/github.com/cloudfoundry-community/bosh-cloudstack-cpi-release?v=12
   sha1: 9438a7d28791b68efe5fbcfbb8a3e298e5798912
 
 resource_pools:
 - name: vms    
   network: private
   stemcell:
-    url:  https://s3.amazonaws.com/orange-cloudstack-xen-stemcell/bosh-stemcell-3192-cloudstack-xen-ubuntu-trusty-go_agent.tgz
+    url:  https://orange-candidate-cloudstack-xen-stemcell.s3.amazonaws.com/bosh-stemcell/cloudstack/bosh-stemcell-3262.3-cloudstack-xen-ubuntu-trusty-go_agent.tgz
     sha1: cf6f6925d133d0b579d154694025c027bc64ef88
 
   cloud_properties:                                                                                              
@@ -224,7 +220,7 @@ jobs:
 
   templates:
   - {name: nats, release: bosh}
-  - {name: redis, release: bosh}
+  #- {name: redis, release: bosh}
   - {name: postgres, release: bosh}
   - {name: blobstore, release: bosh}
   - {name: director, release: bosh} 
@@ -286,7 +282,7 @@ jobs:
       api_key: <cloudstack api key>
       secret_access_key: <cloudstack acces key>
       default_key_name: bosh-keypair  #<-- set ssh keypair name
-      private_key: zz
+      private_key: zz #<-- unused
       state_timeout: 600
       state_timeout_volume: 600
       stemcell_public_visibility: true
@@ -302,7 +298,7 @@ jobs:
       webdav_port: 8080
       webdav_directory: "/var/vcap/store/cloudstack_cpi/webdav"
       registry:
-        endpoint: http://<micro_bosh_ip>:8080
+        endpoint: http://admin:admin@<micro_bosh_ip>:8080
         user: admin
         password: admin
       blobstore:
@@ -345,7 +341,7 @@ cloud_provider:
 
 ## cloudstack stemcell
 
-
+A cloudstack xen stemcell is under development, following bosh official stemcells. Will soon prepare a PR to bosh project.
 
 <!-- source of the diag into stemcell_sequence.txt -->
 
