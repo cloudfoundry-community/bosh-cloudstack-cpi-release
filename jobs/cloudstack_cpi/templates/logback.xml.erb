@@ -14,8 +14,10 @@
 	</appender>
 
 	<logger name="com.orange.oss.cloudfoundry" level="${config.logger.level}" />
-	<logger name="jclouds.wire" level="INFO" />	
-
+        <!-- see  https://jclouds.apache.org/reference/logging/ -->
+	<logger name="jclouds.wire" level="DEBUG" />	
+	<logger name="jclouds.headers" level="INFO" />	
+	<logger name="jclouds.compute" level="DEBUG" />	
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
