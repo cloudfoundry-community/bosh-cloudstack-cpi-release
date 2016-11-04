@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image: docker:///bosh/os-image-stemcell-builder
+
+inputs:
+  - name: bosh-src
+  - name: bosh-cpi-src
+
+outputs:
+  - name: stemcell
+
+run:
+  path: bosh-cpi-src/ci/stemcell/tasks/build.sh
+
+params:
+  IAAS:                   cloudstack
+  HYPERVISOR:             xen
+  OS_NAME:                ubuntu
+  OS_VERSION:             trusty
+  CANDIDATE_BUILD_NUMBER: 3262.15
