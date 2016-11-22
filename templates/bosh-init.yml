@@ -105,7 +105,7 @@ jobs:
       db: *db                                                                                            
 
   cloudstack:  &cloudstack # <--- Replace values below
-    endpoint: http://csm05.preprod.cloud.s0.p.fti.net:8080/client/api
+    endpoint: http://mycsm.domain:8080/client/api
     api_key: TKVNrMEIx2lHMjwavyb2Y68c7D3FP1xzQ54Fnvdlzt8ZNKe2Bcf9qF8_-VGSQ_-0qVuXXJ2KiNcMxQPbWWB93Q
     secret_access_key: zz
     default_key_name: zzzzz
@@ -113,10 +113,10 @@ jobs:
     state_timeout: 100
     state_timeout_volume: 1200
     stemcell_public_visibility: true
-    default_zone: SPH-PP-NEON
-    proxy_host: 10.98.253.30
+    default_zone: MY-CS-ZONE
+    proxy_host: 10.7.9.142
     proxy_port: 8080
-    proxy_user: poblin
+    proxy_user: "yyyyyy" 
     proxy_password: "xxxxx"
 
     agent: {mbus: "nats://nats:nats-password@10.203.6.105:4222"}
