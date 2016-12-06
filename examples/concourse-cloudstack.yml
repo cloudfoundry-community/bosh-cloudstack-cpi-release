@@ -1,160 +1,99 @@
 ---
 name: concourse
 
-# replace with bosh status --uuid
-director_uuid: 15ce6ced-2007-4b1b-a6b2-82d37c611f39
-
-# pick a sane db name and password
-atc_db_name: &atc-db-name atc
-atc_db_role: &atc-db-role
-  name: atc
-  password: egcivtoirj
-
-# replace all addresses with your network's IP range
-#
-# e.g. X.X.0.2 -> 10.0.0.2
-networks:
-  - name: concourse
-    type: manual
-    subnets:
-      - range: 10.234.228.128/26
-        gateway: 10.234.228.129
-        dns: [10.234.50.180,10.234.71.124]
-        reserved: 
-        - 10.234.228.1 - 10.234.228.158
-        - 10.234.228.160 - 10.234.228.253
-
-        static:
-          - &discovery_static_ip 10.234.228.159
-        cloud_properties: {name: "3112 - preprod - back"} # <--- Replace with Network name
-
-
+# replace with `bosh status --uuid`
+director_uuid: xxxxx 
 
 releases:
-  - name: concourse
-    version: latest
-  - name: garden-linux
-    version: latest
+- name: concourse
+  version: latest
+- name: garden-runc
+  version: latest
+- name: cron-resource
+  version: latest
 
-jobs:
-  - name: discovery
-    instances: 1
-    resource_pool: discovery
-    persistent_disk: 1024
-    templates:
-      - {release: concourse, name: consul-agent}
-    networks:
-      - name: concourse
-        static_ips: [*discovery_static_ip]
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: web
+  instances: 1
+  vm_type: small 
+  stemcell: trusty
+  azs: [z1]
+  networks:
+  - name: dynamic 
+    default: [gateway,dns]
+  
+  - name: floating 
+    static_ips:
+    - 178.11.11.11 # <-- replace with pre allocated cloudstack public adress
+  
+  jobs:
+  - name: atc
+    release: concourse
     properties:
-      consul:
-        agent:
-          mode: server
+      # replace with your CI's externally reachable URL, e.g. https://ci.foo.com
+      external_url: "https://concourse.mycompany.com/"
+      publicly_viewable: true
+      # replace with username/password, or configure GitHub auth
+      basic_auth_username: atc
+      basic_auth_password: wwwwww
 
-  - name: web
-    instances: 1
-    resource_pool: web
-    templates:
-      - {release: concourse, name: consul-agent}
-      - {release: concourse, name: tsa}
-      - {release: concourse, name: atc}
-    networks: [{name: concourse}]
+      postgresql_database: &atc_db atc
+      
+  - name: tsa
+    release: concourse
+    properties: {}
+
+- name: db
+  instances: 1
+  vm_type: default
+  stemcell: trusty
+  persistent_disk_type: large
+  azs: [z1]
+  networks: [{name: dynamic}]
+  jobs:
+  - name: postgresql
+    release: concourse
     properties:
-      atc:
-        publicly_viewable: true
-        basic_auth_username: atc
-        basic_auth_password: athoncoz
-        postgresql:
-          database: *atc-db-name
-          role: *atc-db-role
+      databases:
+      - name: *atc_db
+        # make up a role and password
+        role: atc
+        password: zzzzzzzzzzzzzz
 
-      tsa:
-        atc:
-          username: atc
-          password: athoncoz
+- name: worker
+  instances: 2 
+  vm_type: default 
+  stemcell: trusty
+  azs: [z1]
+  networks:
+  - name: dynamic 
+    default: [gateway,dns]
+ 
 
-
-      consul:
-        agent:
-          servers: {lan: [*discovery_static_ip]}
-
-  - name: db
-    instances: 1
-    resource_pool: databases
-    persistent_disk_pool: database
-    templates:
-      - {release: concourse, name: consul-agent}
-      - {release: concourse, name: postgresql}
-    networks: [{name: concourse}]
-    properties:
-      postgresql:
-        databases: [{name: *atc-db-name}]
-        roles: [*atc-db-role]
-
-      consul:
-        agent:
-          servers: {lan: [*discovery_static_ip]}
-
-  - name: worker
-    instances: 1
-    resource_pool: workers
-    templates:
-      - {release: concourse, name: consul-agent}
-      - {release: concourse, name: groundcrew}
-      - {release: garden-linux, name: garden}
-    networks: [{name: concourse}]
+  jobs:
+  - name: groundcrew
+    release: concourse
+    properties: 
+      additional_resource_types:
+      - type: cron
+        image: /var/vcap/packages/cron-resource
+  - name: baggageclaim
+    release: concourse
+    properties: {}
+  - name: garden
+    release: garden-runc
     properties:
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
-
-      consul:
-        agent:
-          servers: {lan: [*discovery_static_ip]}
-
-disk_pools:
-  - name: database
-    disk_size: 10240
-    cloud_properties:
-      type: gp2
-
-resource_pools:
-  - name: web
-    network: concourse
-    stemcell: &stemcell
-      name: bosh-cloudstack-xen-ubuntu
-      version: latest
-    cloud_properties:
-      compute_offering: "CO1 - Small STD"    
-
-  - name: discovery
-    network: concourse
-    stemcell: *stemcell
-    cloud_properties:
-      compute_offering: "CO1 - Small STD"    
-
-  - name: databases
-    network: concourse
-    stemcell: *stemcell
-    cloud_properties:
-      compute_offering: "CO1 - Small STD"
-      disk: 8192      
-    
-  - name: workers
-    network: concourse
-    stemcell: *stemcell
-    cloud_properties:
-      compute_offering: "CO1 - Small STD"
-      disk: 8192
-      ephemeral_disk_offering: "ephemeral"   
-
-compilation:
-  workers: 1
-  network: concourse
-  reuse_compilation_vms: true
-  cloud_properties:
-    compute_offering: "CO1 - Small STD"
-    ephemeral_disk_offering: "ephemeral"
+  - name: install_cron_resource_package
+    release: cron-resource
+    properties: {}
 
 update:
   canaries: 1

@@ -1,0 +1,89 @@
+
+azs:
+- name: z1
+  cloud_properties: {}
+#    availability_zone: nova
+- name: z2
+  cloud_properties: {}
+#    availability_zone: nova
+
+
+# cloudstack flavors for bosh 2 =================================================
+vm_types:
+- name: small
+  cloud_properties:
+    compute_offering: m1.small
+    ephemeral_disk_offering: Data disk
+    disk: 10000
+- name: default
+  cloud_properties:
+    compute_offering: m1.small
+    ephemeral_disk_offering: Data disk
+    disk: 10000
+- name: large
+  cloud_properties:
+    compute_offering: m1.small
+    ephemeral_disk_offering: Data disk
+    disk: 10000
+
+
+# cloudstack disk sizes for bosh 2 =================================================
+disk_types:
+- name: default
+  disk_size: 3000
+  cloud_properties:
+    disk_offering: Data disk
+  
+
+- name: small_disk
+  disk_size: 3000
+  cloud_properties:
+    disk_offering: Data disk
+  
+  
+- name: large
+  disk_size: 50_000
+  cloud_properties:
+    disk_offering: Data disk
+  
+
+
+#  bosh 2 networks =================================================
+networks:
+
+- name: floating
+  type: vip
+  cloud_properties: {}
+  
+- name: dynamic
+  type: dynamic
+  subnets:
+    - {az: z1, cloud_properties: {name: bosh-vpc-tier}}
+    - {az: z2, cloud_properties: {name: bosh-vpc-tier}}
+    
+- name: compilation-network
+  type: dynamic
+  cloud_properties:
+    name: bosh-vpc-tier
+
+- name: static
+  type: manual
+  subnets:
+  - cloud_properties:
+      name: 100mb-net
+    dns:
+    - 10.1.1.1
+    gateway: 10.1.1.1
+    range: 10.1.1.0/24
+    reserved:
+    - 10.1.1.1 - 10.1.1.30
+    - 10.1.1.50 - 10.1.1.254
+    static:
+    - 10.1.1.31 - 10.1.1.40
+
+compilation:
+  workers: 2 
+  reuse_compilation_vms: true
+  #az: z1
+  vm_type: large
+  network: compilation-network
