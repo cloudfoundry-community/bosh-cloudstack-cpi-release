@@ -75,6 +75,7 @@ spring:
     ehcache:
       config: ehcache.xml
   sleuth:
+    enabled: <%= p('cpi.zipkin.enabled') %>
     sampler:
       percentage: <%= p('cpi.zipkin.sampler-percentage') %>
   zipkin:
