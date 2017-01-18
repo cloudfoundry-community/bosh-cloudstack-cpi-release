@@ -114,7 +114,7 @@ properties:
 
   cpi.vm_create_delay:
     description:
-      delay (in seconds) the cpi will wait after vm creation. To tune e.g. in case of xentools discovery delay
+      delay (in seconds) the cpi will wait after vm creation. To tune e.g. in case of xentools discovery delay. must not exceed 5mins
     default: 10
   
   cpi.vm_expunge_delay:
